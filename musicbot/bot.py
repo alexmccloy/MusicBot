@@ -2017,7 +2017,7 @@ class MusicBot(discord.Client):
     """
     START OF TRIVA CODE ------------------------------------------------------------------------------------------------
     """
-    async def cmd_trivia(self, channel, leftover_args):
+    async def cmd_trivia(self, player, channel, leftover_args):
         """
         Usage:
             {command_prefix}trivia trivailist
@@ -2048,8 +2048,6 @@ class MusicBot(discord.Client):
                 songs.append((song, artist))
             await self.safe_send_message(channel, "Starting triva. Category: " + leftover_args[0])
 
-            for song in songs:
-                print(song)
 
             players = []
             finished = False
@@ -2064,9 +2062,30 @@ class MusicBot(discord.Client):
                 songNo = random.randint(0,len(songs)-1)
                 print("random song is " + songs[songNo][0] + " by " + songs[songNo][1])
                 #clear existing playlist
-                self.player.playlist.clear()
-                info = await self.downloader.extract_info(player.playlist.loop, songs[songNo][0] + " " + songs[songNo][1], download=False, process=False)
-                print (info)
+                player.playlist.clear()
+                song_url =  songs[songNo][0] + " " + songs[songNo][1]
+                info = await self.downloader.extract_info(player.playlist.loop, song_url, download=False, process=False)
+                if info.get('url', '').startswith('ytsearch'):
+                    # print("[Command:play] Searching for \"%s\"" % song_url)
+                    info = await self.downloader.extract_info(
+                        player.playlist.loop,
+                        song_url,
+                        download=False,
+                        process=True,    # ASYNC LAMBDAS WHEN
+                        on_error=lambda e: asyncio.ensure_future(
+                            self.safe_send_message(channel, "```\n%s\n```" % e, expire_in=120), loop=self.loop),
+                        retry_on_error=True
+                    )
+                    song_url = info['entries'][0]['webpage_url']
+                    info = await self.downloader.extract_info(player.playlist.loop, song_url, download=False, process=False)
+                    print(song_url)
+                #just assume everything is from yt search cause im cool like that
+                await player.playlist.add_entry(song_url)
+                player.skip()
+
+                #TODO remove this when ready to loop
+                break
+
 
 def max_score_reached(playerlist):
     """
