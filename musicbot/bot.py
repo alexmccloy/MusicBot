@@ -36,6 +36,8 @@ from .constants import DISCORD_MSG_CHAR_LIMIT, AUDIO_CACHE_PATH
 
 import glob
 import random
+import queue
+import threading
 
 
 load_opus_lib()
@@ -85,6 +87,9 @@ class MusicBot(discord.Client):
         self.exit_signal = None
         self.init_ok = False
         self.cached_client_id = None
+
+        self.triviaMode = False
+        self.messageq = queue.Queue()
 
         if not self.autoplaylist:
             print("Warning: Autoplaylist is empty, disabling.")
@@ -1820,6 +1825,8 @@ class MusicBot(discord.Client):
 
         message_content = message.content.strip()
         if not message_content.startswith(self.config.command_prefix):
+            if self.triviaMode:
+                self.messageq.put((str(message.author).split('#')[0], message_content))
             return
 
         if message.author == self.user:
@@ -2051,17 +2058,20 @@ class MusicBot(discord.Client):
 
             players = []
             finished = False
+            self.triviaMode = True
             while not finished:
                 #Check if someone has won yet
                 winner = max_score_reached(players)
                 if winner > -1:
                     finished = True
-                    await self.safe_send_message(channel, "Winner is" + playerlist[winner][0])
+                    await self.safe_send_message(channel, "Winner is" + players[winner][0])
                     continue
                 #Pick a song from the list and play it
                 songNo = random.randint(0,len(songs)-1)
                 print("random song is " + songs[songNo][0] + " by " + songs[songNo][1])
-                #clear existing playlist
+                #----------------------------------------
+                # GET A YOUTUBE LINK FOR SONG AND ADD IT TO QUEUE, THEN SKIP TO THAT SONG
+                #----------------------------------------
                 player.playlist.clear()
                 song_url =  songs[songNo][0] + " " + songs[songNo][1]
                 info = await self.downloader.extract_info(player.playlist.loop, song_url, download=False, process=False)
@@ -2082,10 +2092,85 @@ class MusicBot(discord.Client):
                 #just assume everything is from yt search cause im cool like that
                 await player.playlist.add_entry(song_url)
                 player.skip()
+                #----------------------------------------
+                # END OF GETTING AND PLAYING SONG
+                #----------------------------------------
+                keepAlive = pythonIsGay(True)
+                dequeueThread = answerChecker(1, answerChecker, self.messageq, songs[songNo], keepAlive)
+                dequeueThread.start()
+                #might have issues here if main thread is blocking, but main thread is the one responsible for adding items to the queue
+                result = None
+                for i in range(30):
+                    result = dequeueThread.join(False)
+                    await asyncio.sleep(1)
+                    if result != None:
+                        keepAlive.value = False
+                        break
+                keepAlive.value = False
+                await asyncio.sleep(5)
+                if dequeueThread.isAlive():
+                    print("SHOULD NOT BE HERE NEED TO MANAGE THREAD BETTER")
+
+                print(result)
+                if result == None:
+                    #no one won
+                    await self.safe_send_message(channel, "No winners, song was " + songs[songNo][0] + " by " + songs[songNo][1])
+                else:
+                    await self.safe_send_message(channel, "Winner is " + result[0] + " with a score of " + str(result[1]))
+                    players = add_scores(players, result)
+                    print(*players)
+
+
+
+                #start next song
+
+
 
                 #TODO remove this when ready to loop
+                #player.pause()
+                #break
+
+
+            self.triviaMode = False
+
+class answerChecker (threading.Thread):
+    def __init__(self, threadID, name, messageQueue, song, keepAlive):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.messageQueue = messageQueue
+        self.song = song
+        self._return = None
+        self.keepAlive = keepAlive
+    def run(self):
+        while True:
+            if self.keepAlive.value:
+                print("got here 1")
+                #take a message off the queue and check it, only exit if it scored points
+                try:
+                    guess = self.messageQueue.get(True, 1)
+                    score = check_guess(guess[1], self.song)
+                    if(score > 0):
+                        #someone guessed right
+                        self._return = (guess[0], score)
+                        break
+                except:
+                    print("no one said anything")
+            else:
+                print("gonna try to kill myself now")
                 break
 
+    def join(self, timeout):
+        #return tuple (name, score) if someone guessed right
+        threading.Thread.join(self, timeout)
+        return self._return
+
+class pythonIsGay:
+    """
+    Container for a reference since no easy to use types are mutable in python and you cant pass a reference
+    """
+    def __init__(self, value):
+        self.value = value
 
 def max_score_reached(playerlist):
     """
@@ -2098,6 +2183,41 @@ def max_score_reached(playerlist):
         if playerlist[i][1] >=10:
             return i
     return -1
+
+def check_guess(guess, song):
+    """
+    Checks a users guess against a song and returns 0,1,2,3:
+    0 for wrong
+    1 for artist correct
+    2 for song correct
+    3 for artist and song correct
+    Ordering and punctuation/case should not matter
+    """
+    print("got here 2")
+    #convert to lower case and remove non letters
+    song = (song[0].lower(), song[1].lower())
+    artist = ''.join([i for i in song[1] if i.isalpha() or i.isspace()])
+    song = ''.join([i for i in song[0] if i.isalpha() or i.isspace()])
+    score = 0
+    if song in guess:
+        score += 2
+    if artist in guess:
+        score += 1
+    return score
+
+def add_scores(players, result):
+    """
+    Takes a list of tuples containing a player name and score and adds new players to the list, or adds the score to an
+    existing player's total
+    """
+    for i in range(len(players)):
+        #if names are the same
+        if players[i][0] == result[0]:
+            players[i] = (players[i][0], players[i][1] + result[1])
+            return players
+    #player wasnt already in list
+    players.append(result)
+    return players
 
 
 if __name__ == '__main__':
