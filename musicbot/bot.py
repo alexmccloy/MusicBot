@@ -2117,7 +2117,7 @@ class MusicBot(discord.Client):
                     #no one won
                     await self.safe_send_message(channel, "No winners, song was " + songs[songNo][0] + " by " + songs[songNo][1])
                 else:
-                    await self.safe_send_message(channel, "Winner is " + result[0] + " with a score of " + str(result[1]))
+                    await self.safe_send_message(channel, "Winner is " + result[0] + " with a score of " + str(result[1]) + "\nSong was " + songs[songNo][0] + " by " + songs[songNo][1])
                     players = add_scores(players, result)
                     print(*players)
 
@@ -2180,7 +2180,7 @@ def max_score_reached(playerlist):
     if len(playerlist) < 1:
         return -1
     for i in range(0,len(playerlist)):
-        if playerlist[i][1] >=10:
+        if playerlist[i][1] >=30:
             return i
     return -1
 
