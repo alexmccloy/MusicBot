@@ -2038,7 +2038,7 @@ class MusicBot(discord.Client):
         if len(leftover_args) == 0:
             output = "Usage: !trivia <listname>\nPick from the following categories\n"
             for s in  glob.glob("trivia/*.txt"):
-                output += s.split('\\')[-1].split('.')[0] + "\n"
+                output += s.split('/')[-1].split('.')[0] + "\n"
             await self.safe_send_message(channel, output)
 
         #Do everything else
@@ -2145,7 +2145,6 @@ class answerChecker (threading.Thread):
     def run(self):
         while True:
             if self.keepAlive.value:
-                print("got here 1")
                 #take a message off the queue and check it, only exit if it scored points
                 try:
                     guess = self.messageQueue.get(True, 1)
@@ -2155,7 +2154,7 @@ class answerChecker (threading.Thread):
                         self._return = (guess[0], score)
                         break
                 except:
-                    print("no one said anything")
+                    pass
             else:
                 print("gonna try to kill myself now")
                 break
@@ -2193,7 +2192,6 @@ def check_guess(guess, song):
     3 for artist and song correct
     Ordering and punctuation/case should not matter
     """
-    print("got here 2")
     #convert to lower case and remove non letters
     song = (song[0].lower(), song[1].lower())
     artist = ''.join([i for i in song[1] if i.isalpha() or i.isspace()])
