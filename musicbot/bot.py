@@ -454,6 +454,7 @@ class MusicBot(discord.Client):
         pass
 
     async def update_now_playing(self, entry=None, is_paused=False):
+        return
         game = None
 
         if self.user.bot:
