@@ -2101,14 +2101,14 @@ class MusicBot(discord.Client):
                 dequeueThread.start()
                 #might have issues here if main thread is blocking, but main thread is the one responsible for adding items to the queue
                 result = None
-                for i in range(30):
+                for i in range(60):
                     result = dequeueThread.join(False)
                     await asyncio.sleep(1)
                     if result != None:
                         keepAlive.value = False
                         break
                 keepAlive.value = False
-                await asyncio.sleep(5)
+                await asyncio.sleep(3)
                 if dequeueThread.isAlive():
                     print("SHOULD NOT BE HERE NEED TO MANAGE THREAD BETTER")
 
