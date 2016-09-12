@@ -34,6 +34,9 @@ from .opus_loader import load_opus_lib
 from .constants import VERSION as BOTVERSION
 from .constants import DISCORD_MSG_CHAR_LIMIT, AUDIO_CACHE_PATH
 
+import glob
+import random
+
 
 load_opus_lib()
 
@@ -2010,6 +2013,72 @@ class MusicBot(discord.Client):
             self.safe_print("[Servers] \"%s\" changed regions: %s -> %s" % (after.name, before.region, after.region))
 
             await self.reconnect_voice_client(after)
+
+    """
+    START OF TRIVA CODE ------------------------------------------------------------------------------------------------
+    """
+    async def cmd_trivia(self, channel, leftover_args):
+        """
+        Usage:
+            {command_prefix}trivia trivailist
+            {command_prefix}trivia
+
+        Starts a game of trivia with the given trivalist.
+        If not list given prints out available lists.
+        """
+
+        #Show list of files and then return
+        if len(leftover_args) == 0:
+            output = "Usage: !trivia <listname>\nPick from the following categories\n"
+            for s in  glob.glob("trivia/*.txt"):
+                output += s.split('\\')[-1].split('.')[0] + "\n"
+            await self.safe_send_message(channel, output)
+
+        #Do everything else
+        else:
+            #open file and load in song list
+            with open("trivia/" + leftover_args[0] + ".txt") as f:
+                lines = f.readlines()
+            #format song list
+            songs = []
+            for line in lines:
+                l = line.split('|')
+                song = l[0].strip()
+                artist = l[1].strip()
+                songs.append((song, artist))
+            await self.safe_send_message(channel, "Starting triva. Category: " + leftover_args[0])
+
+            for song in songs:
+                print(song)
+
+            players = []
+            finished = False
+            while not finished:
+                #Check if someone has won yet
+                winner = max_score_reached(players)
+                if winner > -1:
+                    finished = True
+                    await self.safe_send_message(channel, "Winner is" + playerlist[winner][0])
+                    continue
+                #Pick a song from the list and play it
+                songNo = random.randint(0,len(songs)-1)
+                print("random song is " + songs[songNo][0] + " by " + songs[songNo][1])
+                #clear existing playlist
+                self.player.playlist.clear()
+                info = await self.downloader.extract_info(player.playlist.loop, songs[songNo][0] + " " + songs[songNo][1], download=False, process=False)
+                print (info)
+
+def max_score_reached(playerlist):
+    """
+    Takes a list of player tuples in format (name, score).
+    Returns -1 if no winners, otherwise returns the index of the winner (can only be 1 winner)
+    """
+    if len(playerlist) < 1:
+        return -1
+    for i in range(0,len(playerlist)):
+        if playerlist[i][1] >=10:
+            return i
+    return -1
 
 
 if __name__ == '__main__':
