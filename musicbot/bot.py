@@ -88,7 +88,9 @@ class MusicBot(discord.Client):
         self.init_ok = False
         self.cached_client_id = None
 
+        #Trivia vars
         self.triviaMode = False
+        self.finished = False
         self.messageq = queue.Queue()
 
         if not self.autoplaylist:
@@ -2052,19 +2054,19 @@ class MusicBot(discord.Client):
             for line in lines:
                 l = line.split('|')
                 song = l[0].strip()
+                print(l[1])
                 artist = l[1].strip()
                 songs.append((song, artist))
             await self.safe_send_message(channel, "Starting triva. Category: " + leftover_args[0])
 
 
             players = []
-            finished = False
             self.triviaMode = True
-            while not finished:
+            while not self.finished:
                 #Check if someone has won yet
                 winner = max_score_reached(players)
                 if winner > -1:
-                    finished = True
+                    self.finished = True
                     await self.safe_send_message(channel, "Winner is " + players[winner][0])
                     continue
                 #Pick a song from the list and play it
@@ -2120,7 +2122,7 @@ class MusicBot(discord.Client):
                     await self.safe_send_message(channel, "Winner is " + result[0] + " with a score of " + str(result[1]) + "\nSong was " + songs[songNo][0] + " by " + songs[songNo][1])
                     players = add_scores(players, result)
                     #print(*players)
-                    await self.safe_send_message(channel, printable_scores(players)) 
+                    await self.safe_send_message(channel, printable_scores(players))
 
 
 
