@@ -2114,7 +2114,7 @@ class MusicBot(discord.Client):
                 while  not self.messageq.empty():
                     lateGuess = self.messageq.get(False)
                     if check_guess(lateGuess[1], songs[songNo]) == 4:
-                        players = add_score(players(lateGuess[0], 2))
+                        players = add_scores(players(lateGuess[0], 2))
                 if dequeueThread.isAlive():
                     print("SHOULD NOT BE HERE NEED TO MANAGE THREAD BETTER")
 
