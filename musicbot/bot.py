@@ -2024,6 +2024,12 @@ class MusicBot(discord.Client):
 
             await self.reconnect_voice_client(after)
 
+
+    async def cmd_triviastop(self):
+        self.finished = True
+        self.triviaMode = False
+        return
+
     """
     START OF TRIVA CODE ------------------------------------------------------------------------------------------------
     """
