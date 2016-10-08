@@ -2110,8 +2110,11 @@ class MusicBot(discord.Client):
                         break
                 keepAlive.value = False
                 await asyncio.sleep(3)
+                #pull other messages off queue and process their scores
                 while  not self.messageq.empty():
-                    print(self.messageq.get(False))
+                    lateGuess = self.messageq.get(False)
+                    if check_guess(lateGuess[1], songs[songNo]) == 4:
+                        players = add_score(players(lateGuess[0], 2))
                 if dequeueThread.isAlive():
                     print("SHOULD NOT BE HERE NEED TO MANAGE THREAD BETTER")
 
@@ -2195,8 +2198,8 @@ def check_guess(guess, song):
     Checks a users guess against a song and returns 0,1,2,3:
     0 for wrong
     1 for artist correct
-    2 for song correct
-    3 for artist and song correct
+    1 for song correct
+    4 for artist and song correct
     Ordering and punctuation/case should not matter
     """
     #convert to lower case and remove non letters
