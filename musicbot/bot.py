@@ -2065,7 +2065,7 @@ class MusicBot(discord.Client):
                 winner = max_score_reached(players)
                 if winner > -1:
                     finished = True
-                    await self.safe_send_message(channel, "Winner is" + players[winner][0])
+                    await self.safe_send_message(channel, "Winner is " + players[winner][0])
                     continue
                 #Pick a song from the list and play it
                 songNo = random.randint(0,len(songs)-1)
@@ -2119,7 +2119,8 @@ class MusicBot(discord.Client):
                 else:
                     await self.safe_send_message(channel, "Winner is " + result[0] + " with a score of " + str(result[1]) + "\nSong was " + songs[songNo][0] + " by " + songs[songNo][1])
                     players = add_scores(players, result)
-                    print(*players)
+                    #print(*players)
+                    await self.safe_send_message(channel, printable_scores(players)) 
 
 
 
@@ -2133,6 +2134,8 @@ class MusicBot(discord.Client):
 
 
             self.triviaMode = False
+
+
 
 class answerChecker (threading.Thread):
     def __init__(self, threadID, name, messageQueue, song, keepAlive):
@@ -2180,7 +2183,7 @@ def max_score_reached(playerlist):
     if len(playerlist) < 1:
         return -1
     for i in range(0,len(playerlist)):
-        if playerlist[i][1] >=30:
+        if playerlist[i][1] >=20:
             return i
     return -1
 
@@ -2199,9 +2202,11 @@ def check_guess(guess, song):
     song = ''.join([i for i in song[0] if i.isalpha() or i.isspace()])
     score = 0
     if song in guess:
-        score += 2
+        score += 1
     if artist in guess:
         score += 1
+    if score == 2:
+        score = 4
     return score
 
 def add_scores(players, result):
@@ -2217,6 +2222,13 @@ def add_scores(players, result):
     #player wasnt already in list
     players.append(result)
     return players
+
+def printable_scores(players):
+    #return a printable sting of the scores
+    ret = ""
+    for p in players:
+        ret += p[0] + " - " + str(p[1]) + "\n"
+    return ret
 
 
 if __name__ == '__main__':
