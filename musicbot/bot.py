@@ -2110,7 +2110,7 @@ class MusicBot(discord.Client):
                         break
                 keepAlive.value = False
                 await asyncio.sleep(3)
-                while !self.messageQueue.empty():
+                while  not self.messageQueue.empty():
                     print(messageQueue.get(False))
                 if dequeueThread.isAlive():
                     print("SHOULD NOT BE HERE NEED TO MANAGE THREAD BETTER")
