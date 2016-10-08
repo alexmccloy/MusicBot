@@ -1829,7 +1829,7 @@ class MusicBot(discord.Client):
         message_content = message.content.strip()
         if not message_content.startswith(self.config.command_prefix):
             print(str(message.author))
-            if self.triviaMode and str(message.author != "MusicBot"):
+            if self.triviaMode and str(message.author != "MusicBot#4707"):
                 self.messageq.put((str(message.author).split('#')[0], message_content))
             return
 
