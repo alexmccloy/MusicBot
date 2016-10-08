@@ -1828,7 +1828,6 @@ class MusicBot(discord.Client):
 
         message_content = message.content.strip()
         if not message_content.startswith(self.config.command_prefix):
-            print(str(message.author))
             if self.triviaMode and not "MusicBot" in str(message.author):
                 self.messageq.put((str(message.author).split('#')[0], message_content))
             return
@@ -2055,7 +2054,6 @@ class MusicBot(discord.Client):
             for line in lines:
                 l = line.split('|')
                 song = l[0].strip()
-                print(l[1])
                 artist = l[1].strip()
                 songs.append((song, artist))
             await self.safe_send_message(channel, "Starting triva. Category: " + leftover_args[0])
@@ -2112,6 +2110,8 @@ class MusicBot(discord.Client):
                         break
                 keepAlive.value = False
                 await asyncio.sleep(3)
+                while !self.messageQueue.empty():
+                    print(messageQueue.get(False))
                 if dequeueThread.isAlive():
                     print("SHOULD NOT BE HERE NEED TO MANAGE THREAD BETTER")
 
