@@ -14,7 +14,7 @@ class LeaderboardManager:
 
     def load_leaderboard(self):
         #loads leaderboard into memory from file - must be called before leaderboards can be used
-        with open(leaderboardFile) as json_data:
+        with open(self.leaderboardFile) as json_data:
             self.leaderboard = json.load(json_data)
             json_data.close()
 
