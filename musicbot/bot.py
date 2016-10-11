@@ -93,6 +93,7 @@ class MusicBot(discord.Client):
         self.triviaMode = False
         self.finished = False
         self.messageq = queue.Queue()
+        self.max_score = 10
 
         if not self.autoplaylist:
             print("Warning: Autoplaylist is empty, disabling.")
@@ -2036,7 +2037,7 @@ class MusicBot(discord.Client):
             listName = None
         else:
             listName = leftover_args[0]
-        lm = LeaderboardManager()
+        lm = LeaderboardManager(self.max_score)
         lm.load_leaderboard()
         await self.safe_send_message(channel, lm.load_game_results(listName))
 
@@ -2046,12 +2047,21 @@ class MusicBot(discord.Client):
     async def cmd_trivia(self, player, channel, leftover_args):
         """
         Usage:
-            {command_prefix}trivia trivailist
+            {command_prefix}trivia triviaList <max_score>
             {command_prefix}trivia
 
         Starts a game of trivia with the given trivalist.
         If not list given prints out available lists.
         """
+
+        #check if need to set max_score
+        if len(leftover_args) == 2:
+            try:
+                self.max_score = int(leftover_args[1])
+            except ValueError:
+                self.max_score = 10
+        else:
+            self.max_score = 10
 
         #Show list of files and then return
         if len(leftover_args) == 0:
@@ -2206,7 +2216,7 @@ def max_score_reached(playerlist):
     if len(playerlist) < 1:
         return -1
     for i in range(0,len(playerlist)):
-        if playerlist[i][1] >=10:
+        if playerlist[i][1] >=self.max_score:
             return i
     return -1
 
