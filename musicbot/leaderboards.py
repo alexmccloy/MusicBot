@@ -12,13 +12,13 @@ class LeaderboardManager:
         self.leaderboardFile = "trivia/leaderboards.json"
         self.learderboard = None
 
-    def load_leaderboard():
+    def load_leaderboard(self):
         #loads leaderboard into memory from file - must be called before leaderboards can be used
         with open(leaderboardFile) as json_data:
             self.leaderboard = json.load(json_data)
             json_data.close()
 
-    def save_leaderboard():
+    def save_leaderboard(self):
         if self.leaderboard == None:
             return
         #moves exising leaderboard to leaderboard2.json and then writes leaderboard in current memory to file
@@ -28,7 +28,7 @@ class LeaderboardManager:
         newfile.write(json.dumps(self.leaderboard))
         newfile.close()
 
-    def add_game_results(triviaName, results):
+    def add_game_results(self, triviaName, results):
         #adds game results to leaderboards for a single triviaName(dictionary key). If game exists will update the
         #values, else will create a new entry
         try:
@@ -42,7 +42,7 @@ class LeaderboardManager:
         self.leaderboard[triviaName] = average_lists(self.leaderboard[triviaName], results)
 
 
-    def load_game_results(triviaName):
+    def load_game_results(self, triviaName):
         #returns a formatted string with leaderboard results for the given triviaName. If given argument is None then
         #return all trivia games
         output = ""
@@ -58,7 +58,7 @@ class LeaderboardManager:
 
 
 
-    def average_lists(old, new):
+    def average_lists(self, old, new):
         # average the scores in 2 lists
         megalist = old + new
         result = []
