@@ -2030,6 +2030,10 @@ class MusicBot(discord.Client):
         self.triviaMode = False
         return
 
+    async def cmd_triviascores(self, channel, leftover_args):
+        print(len(leftover_args))
+        return
+
     """
     START OF TRIVA CODE ------------------------------------------------------------------------------------------------
     """
