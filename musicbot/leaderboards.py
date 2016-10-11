@@ -32,7 +32,6 @@ class LeaderboardManager:
         #values, else will create a new entry
         try:
             oldEntry = self.leaderboard[triviaName]
-            break
         except KeyError:
             #value was not already in dicitonary - insert new entry
             self.leaderboard[triviaName] = results
