@@ -2195,7 +2195,7 @@ def max_score_reached(playerlist):
     if len(playerlist) < 1:
         return -1
     for i in range(0,len(playerlist)):
-        if playerlist[i][1] >=20:
+        if playerlist[i][1] >=10:
             return i
     return -1
 
