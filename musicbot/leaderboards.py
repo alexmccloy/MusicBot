@@ -32,6 +32,10 @@ class LeaderboardManager:
     def add_game_results(self, triviaName, results):
         #adds game results to leaderboards for a single triviaName(dictionary key). If game exists will update the
         #values, else will create a new entry
+
+        #divide results so that score is independent of max_score
+        for pair in results:
+            results[1] /= self.max_score
         try:
             oldEntry = self.leaderboard[triviaName]
         except KeyError:
@@ -57,7 +61,7 @@ class LeaderboardManager:
 
         output += triviaName + ":\n"
         for player in self.leaderboard[triviaName]:
-            output += player[0] + ": " + str(100*player[1]/self.max_score) + "\n"
+            output += player[0] + ": " + str(100*player[1]) + "\n"
         return output
 
 
