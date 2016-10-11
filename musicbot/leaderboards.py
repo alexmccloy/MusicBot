@@ -8,9 +8,10 @@ trivia_name <string> : players (player_name, score)[]
 
 
 class LeaderboardManager:
-    def __init__(self):
+    def __init__(selfi, max_score):
         self.leaderboardFile = "trivia/leaderboards.json"
         self.learderboard = None
+        self.max_score = max_score
 
     def load_leaderboard(self):
         #loads leaderboard into memory from file - must be called before leaderboards can be used
@@ -53,7 +54,7 @@ class LeaderboardManager:
 
         output += triviaName + ":\n"
         for player in self.leaderboard[triviaName]:
-            output += player[0] + ": " + player[1] + "\n"
+            output += player[0] + ": " + str(player[1]) + "\n"
         return output
 
 
@@ -74,5 +75,6 @@ class LeaderboardManager:
                     score += megalist[j][1]
                     num += 1
             names.append(name)
-            result.append((name, int(score/num)))
+            result.append((name, int((score/num)/self.max_score)))
+        result.sort(reverse=True, key=lambda tup: tup[1])
         return result
