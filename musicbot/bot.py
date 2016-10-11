@@ -2032,7 +2032,7 @@ class MusicBot(discord.Client):
         return
 
     async def cmd_triviascores(self, channel, leftover_args):
-        if len(leftover_args == 0):
+        if len(leftover_args) == 0:
             listName = None
         else:
             listName = leftover_args[0]
