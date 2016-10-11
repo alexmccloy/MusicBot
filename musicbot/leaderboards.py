@@ -8,7 +8,7 @@ trivia_name <string> : players (player_name, score)[]
 
 
 class LeaderboardManager:
-    def __init__(selfi, max_score):
+    def __init__(self, max_score):
         self.leaderboardFile = "trivia/leaderboards.json"
         self.learderboard = None
         self.max_score = max_score
@@ -46,6 +46,9 @@ class LeaderboardManager:
     def load_game_results(self, triviaName):
         #returns a formatted string with leaderboard results for the given triviaName. If given argument is None then
         #return all trivia games
+        #first sort all lists
+        for key in self.leaderboard:
+            self.leaderboard[key].sort(reverse=True, key=lambda tup: tup[1])
         output = ""
         if triviaName == None or triviaName not in self.leaderboard:
             for key in self.leaderboard:
@@ -75,6 +78,5 @@ class LeaderboardManager:
                     score += megalist[j][1]
                     num += 1
             names.append(name)
-            result.append((name, int((score/num)/self.max_score)))
-        result.sort(reverse=True, key=lambda tup: tup[1])
+            result.append((name, int(100*(score/num)/self.max_score)))
         return result
