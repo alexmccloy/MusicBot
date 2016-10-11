@@ -2052,6 +2052,7 @@ class MusicBot(discord.Client):
 
         #Do everything else
         else:
+            self.finished = False
             #open file and load in song list
             with open("trivia/" + leftover_args[0] + ".txt") as f:
                 lines = f.readlines()
