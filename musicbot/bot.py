@@ -2093,7 +2093,11 @@ class MusicBot(discord.Client):
                 winner = max_score_reached(players)
                 if winner > -1:
                     self.finished = True
-                    await self.safe_send_message(channel, "Winner is " + players[winner][0])
+                    await self.safe_send_message(channel, "-----------------------------\nWinner is " + players[winner][0]+"!\nUpdating Leaderboards...")
+                    lm = Leaderboards.LeaderboardManager(self.max_score)
+                    lm.load_leaderboard()
+                    lm.add_game_results(leftover_args[0], players)
+                    lm.save_leaderboard()
                     continue
                 #Pick a song from the list and play it
                 songNo = random.randint(0,len(songs)-1)
