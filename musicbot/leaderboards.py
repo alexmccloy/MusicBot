@@ -39,7 +39,7 @@ class LeaderboardManager:
             return
 
         #value was already in dictionary
-        self.leaderboard[triviaName] = average_lists(self.leaderboard[triviaName], results)
+        self.leaderboard[triviaName] = self.average_lists(self.leaderboard[triviaName], results)
 
 
     def load_game_results(self, triviaName):
@@ -48,7 +48,7 @@ class LeaderboardManager:
         output = ""
         if triviaName == None or triviaName not in self.leaderboard:
             for key in self.leaderboard:
-                output += load_game_results(key) + "\n\n"
+                output += self.load_game_results(key) + "\n\n"
             return output
 
         output += triviaName + ":\n"
