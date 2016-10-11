@@ -26,8 +26,8 @@ class LeaderboardManager:
         #this will backup the previous leaderboard but keep only 1 backup at a time
         os.rename(self.leaderboardFile, self.leaderboardFile + "_backup")
         newFile = open(self.leaderboardFile, "w")
-        newfile.write(json.dumps(self.leaderboard))
-        newfile.close()
+        newFile.write(json.dumps(self.leaderboard))
+        newFile.close()
 
     def add_game_results(self, triviaName, results):
         #adds game results to leaderboards for a single triviaName(dictionary key). If game exists will update the
