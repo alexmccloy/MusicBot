@@ -38,7 +38,7 @@ import glob
 import random
 import queue
 import threading
-from musicbot.leaderboard import LeaderboardManager
+from musicbot.leaderboards import LeaderboardManager
 
 
 load_opus_lib()
