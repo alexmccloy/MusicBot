@@ -57,7 +57,7 @@ class LeaderboardManager:
 
         output += triviaName + ":\n"
         for player in self.leaderboard[triviaName]:
-            output += player[0] + ": " + str(player[1]) + "\n"
+            output += player[0] + ": " + str(100*player[1]/self.max_score) + "\n"
         return output
 
 
