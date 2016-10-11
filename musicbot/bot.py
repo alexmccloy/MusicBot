@@ -38,6 +38,7 @@ import glob
 import random
 import queue
 import threading
+from musicbot.leaderboard import LeaderboardManager
 
 
 load_opus_lib()
@@ -2031,8 +2032,13 @@ class MusicBot(discord.Client):
         return
 
     async def cmd_triviascores(self, channel, leftover_args):
-        print(len(leftover_args))
-        return
+        if len(leftover_args == 0):
+            listName = None
+        else:
+            listName = leftover_args[0]
+        lm = LeaderboardManager()
+        lm.load_leaderboard()
+        await self.safe_send_message(channel, lm.load_game_results(listName))
 
     """
     START OF TRIVA CODE ------------------------------------------------------------------------------------------------
