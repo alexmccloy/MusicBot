@@ -8,8 +8,9 @@ trivia_name <string> : players (player_name, score)[]
 
 
 class LeaderboardManager:
-    self.leaderboardFile = "trivia/leaderboards.json"
-    self.learderboard = None
+    def __init__(self):
+        self.leaderboardFile = "trivia/leaderboards.json"
+        self.learderboard = None
 
     def load_leaderboard():
         #loads leaderboard into memory from file - must be called before leaderboards can be used
