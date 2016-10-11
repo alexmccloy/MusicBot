@@ -2090,7 +2090,7 @@ class MusicBot(discord.Client):
             self.triviaMode = True
             while not self.finished:
                 #Check if someone has won yet
-                winner = max_score_reached(players)
+                winner = max_score_reached(self.max_score, players)
                 if winner > -1:
                     self.finished = True
                     await self.safe_send_message(channel, "-----------------------------\nWinner is " + players[winner][0]+"!\nUpdating Leaderboards...")
@@ -2212,7 +2212,7 @@ class pythonIsGay:
     def __init__(self, value):
         self.value = value
 
-def max_score_reached(playerlist):
+def max_score_reached(maxScore, playerlist):
     """
     Takes a list of player tuples in format (name, score).
     Returns -1 if no winners, otherwise returns the index of the winner (can only be 1 winner)
@@ -2220,7 +2220,7 @@ def max_score_reached(playerlist):
     if len(playerlist) < 1:
         return -1
     for i in range(0,len(playerlist)):
-        if playerlist[i][1] >=self.max_score:
+        if playerlist[i][1] >=maxScore:
             return i
     return -1
 
