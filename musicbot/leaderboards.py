@@ -34,8 +34,8 @@ class LeaderboardManager:
         #values, else will create a new entry
 
         #divide results so that score is independent of max_score
-        for pair in results:
-            results[1] /= self.max_score
+        for i in range(len(results)):
+            results[i] = (results[i][0], results[i][1]/self.max_score)
         try:
             oldEntry = self.leaderboard[triviaName]
         except KeyError:
@@ -82,5 +82,5 @@ class LeaderboardManager:
                     score += megalist[j][1]
                     num += 1
             names.append(name)
-            result.append((name, int(100*(score/num)/self.max_score)))
+            result.append((name, int(100*((score/num)/self.max_score))))
         return result
