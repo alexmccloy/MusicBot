@@ -82,5 +82,5 @@ class LeaderboardManager:
                     score += megalist[j][1]
                     num += 1
             names.append(name)
-            result.append((name, int(100*((score/num)/self.max_score))))
+            result.append((name, (score/num)/self.max_score))
         return result
