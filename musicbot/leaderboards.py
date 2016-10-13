@@ -82,5 +82,6 @@ class LeaderboardManager:
                     score += megalist[j][1]
                     num += 1
             names.append(name)
+            print("Name " + str(name) + ", score " + str(score) + ", num " + str(num) + ", maxscore" + str(self.max_score))
             result.append((name, (score/num)/self.max_score))
         return result
