@@ -2235,8 +2235,11 @@ def check_guess(guess, song):
     """
     #convert to lower case and remove non letters
     song = (song[0].lower(), song[1].lower())
-    artist = ''.join([i for i in song[1] if i.isalpha() or i.isspace()])
-    song = ''.join([i for i in song[0] if i.isalpha() or i.isspace()])
+    guess = guess.lower()
+    artist = ''.join([i for i in song[1] if i.isalpha() or i.isspace() or i.isdigit()])
+    song = ''.join([i for i in song[0] if i.isalpha() or i.isspace() or i.isdigit()])
+    if song.startswith("the ") and len(song) > 4:
+        song = song[4:]
     score = 0
     if song in guess:
         score += 1
