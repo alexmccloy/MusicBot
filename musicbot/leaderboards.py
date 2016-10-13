@@ -70,7 +70,7 @@ class LeaderboardManager:
         # average the scores in 2 lists
         newnew = []
         for p in new:
-            newnew.append(p[0], p[1]/self.max_score)
+            newnew.append((p[0], p[1]/self.max_score))
         megalist = old + newnew
         result = []
         names = []
