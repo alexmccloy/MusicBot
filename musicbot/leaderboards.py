@@ -68,7 +68,10 @@ class LeaderboardManager:
 
     def average_lists(self, old, new):
         # average the scores in 2 lists
-        megalist = old + new
+        newnew = []
+        for p in new:
+            newnew.append(p[0], p[1]/self.max_score)
+        megalist = old + newnew
         result = []
         names = []
         for i in range(len(megalist)):
@@ -82,6 +85,6 @@ class LeaderboardManager:
                     score += megalist[j][1]
                     num += 1
             names.append(name)
-            print("Name " + str(name) + ", score " + str(score) + ", num " + str(num) + ", maxscore" + str(self.max_score))
-            result.append((name, (score/num)/self.max_score))
+            print("Name " + str(name) + ", score " + str(score) + ", num " + str(num) + ", maxscore " + str(self.max_score))
+            result.append((name, (score/num)))
         return result
