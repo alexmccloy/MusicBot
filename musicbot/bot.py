@@ -2238,9 +2238,12 @@ def check_guess(guess, song):
     guess = guess.lower()
     artist = ''.join([i for i in song[1] if i.isalpha() or i.isspace() or i.isdigit()])
     song = ''.join([i for i in song[0] if i.isalpha() or i.isspace() or i.isdigit()])
-    if song.startswith("the ") and len(song) > 4:
-        song = song[4:]
+    if artist.startswith("the ") and len(artist) > 4:
+        artist = artist[4:]
     score = 0
+    print("Song is " + song)
+    print("Arti is " + artist)
+    print("Gues is " + guess)
     if song in guess:
         score += 1
     if artist in guess:
