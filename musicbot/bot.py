@@ -2081,10 +2081,14 @@ class MusicBot(discord.Client):
             extraParameters = ""
             if lines[0].startswith("!"):
                 extraParameters = lines[0][1:]
+                print("Using extra parameter: "  + extraParameters)
                 lines = lines[1:]
             songs = []
             for line in lines:
                 l = line.split('|')
+                if len(l) < 2:
+                    print("Line not long enough: " + line)
+                    continue
                 song = l[0].strip()
                 artist = l[1].strip()
                 songs.append((song, artist))
