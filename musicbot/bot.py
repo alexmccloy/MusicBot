@@ -2076,7 +2076,12 @@ class MusicBot(discord.Client):
             #open file and load in song list
             with open("trivia/" + leftover_args[0] + ".txt") as f:
                 lines = f.readlines()
+                f.close()
             #format song list
+            extraParameters = ""
+            if lines[0].startswith("!"):
+                extraParameters = lines[0][1:]
+                lines = lines[1:]
             songs = []
             for line in lines:
                 l = line.split('|')
@@ -2106,7 +2111,7 @@ class MusicBot(discord.Client):
                 # GET A YOUTUBE LINK FOR SONG AND ADD IT TO QUEUE, THEN SKIP TO THAT SONG
                 #----------------------------------------
                 player.playlist.clear()
-                song_url =  songs[songNo][0] + " " + songs[songNo][1]
+                song_url =  songs[songNo][0] + " " + songs[songNo][1] + extraParameters
                 info = await self.downloader.extract_info(player.playlist.loop, song_url, download=False, process=False)
                 if info.get('url', '').startswith('ytsearch'):
                     # print("[Command:play] Searching for \"%s\"" % song_url)
