@@ -2123,7 +2123,7 @@ class MusicBot(discord.Client):
                 datas = data.decode("utf-8")
                 j = json.loads(datas)
                 urls = []
-                for url in j["values"]:
+                for url in j["value"]:
                     urls.append(url["thumbnailUrl"])
                 #----------------------------------------
                 # END OF GETTING URLS
