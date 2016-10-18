@@ -2041,6 +2041,9 @@ class MusicBot(discord.Client):
         lm.load_leaderboard()
         await self.safe_send_message(channel, lm.load_game_results(listName))
 
+    async def cmd_pictionary(self, channel):
+        await self.safe_send_message(channel, "https://tse4.mm.bing.net/th?id=OIP.M849f4c0032065d80637918c9b6519a87o0&pid=Api")
+
     """
     START OF TRIVA CODE ------------------------------------------------------------------------------------------------
     """
