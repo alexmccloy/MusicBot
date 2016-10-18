@@ -39,6 +39,7 @@ import random
 import queue
 import threading
 from musicbot.leaderboards import LeaderboardManager
+import http.client, urllib.request, urllib.parse, urllib.error, base64
 
 
 load_opus_lib()
@@ -2042,7 +2043,120 @@ class MusicBot(discord.Client):
         await self.safe_send_message(channel, lm.load_game_results(listName))
 
     async def cmd_pictionary(self, channel):
+        """
+        Usage:
+            {command_prefix}pictionary wordList <max_score>
+            {command_prefix}pictionary
+
+        Starts a game of pictionary with the given wordlist.
+        If not list given prints out available lists.
+        """
         await self.safe_send_message(channel, "https://tse4.mm.bing.net/th?id=OIP.M849f4c0032065d80637918c9b6519a87o0&pid=Api")
+        if self.finished == True:
+            await self.safe_send_message(channel, "Game already in progress")
+            return
+        #check if need to set max_score
+        if len(leftover_args) == 2:
+            try:
+                self.max_score = int(leftover_args[1])
+            except ValueError:
+                self.max_score = 10
+        else:
+            self.max_score = 10
+        #Show list of files and then return
+        if len(leftover_args) == 0:
+            output = "Usage: !pictionary <listname>\nPick from the following categories\n"
+            for s in  glob.glob("pictionary/*.txt"):
+                output += s.split('/')[-1].split('.')[0] + "\n"
+            await self.safe_send_message(channel, output)
+
+        #Do everything else
+        else:
+            self.finished = False
+            #open file and load in song list
+            with open("trivia/" + leftover_args[0] + ".txt") as f:
+                lines = f.readlines()
+                f.close()
+            #format song list
+            extraParameters = ""
+            if lines[0].startswith("!"):
+                extraParameters = lines[0][1:]
+                print("Using extra parameter: "  + extraParameters)
+                lines = lines[1:]
+            words = lines
+            await self.safe_send_message(channel, "Starting pictionary. Category: " + leftover_args[0])
+
+            players = []
+            self.triviaMode = True
+            while not self.finished:
+                #Check if someone has won yet
+                winner = max_score_reached(self.max_score, players)
+                if winner > -1:
+                    self.finished = True
+                    await self.safe_send_message(channel, "-----------------------------\nWinner is " + players[winner][0]+"!\nUpdating Leaderboards...")
+                    '''lm = LeaderboardManager(self.max_score)
+                    lm.load_leaderboard()
+                    lm.add_game_results(leftover_args[0], players)
+                    lm.save_leaderboard()'''
+                    continue
+                #Pick a song from the list and play it
+                wordNo = random.randint(0,len(words)-1)
+                print("random word is " + words[wordNo][0])
+                #----------------------------------------
+                # GET LIST OF IMAGES FROM BING
+                #----------------------------------------
+                headers = {
+                    # Request headers
+                    'Content-Type': 'multipart/form-data',
+                    'Ocp-Apim-Subscription-Key': '2441409a71aa4ac780e405e782864847',
+                }
+                params = urllib.parse.urlencode({"q":words[wordNo]})
+                try:
+                    conn = http.client.HTTPSConnection('api.cognitive.microsoft.com')
+                    conn.request("POST", "/bing/v5.0/images/search?%s" % params, "{body}", headers)
+                    response = conn.getresponse()
+                    data = response.read()
+                    conn.close()
+                except Exception as e:
+                    print("[Errno {0}] {1}".format(e.errno, e.strerror))
+                datas = data.decode("utf-8")
+                j = json.loads(datas)
+                urls = []
+                for url in j["values"]:
+                    urls.append(url["thumbnailUrl"])
+                #----------------------------------------
+                # END OF GETTING URLS
+                #----------------------------------------
+                keepAlive = pythonIsGay(True)
+                dequeueThread = pictionaryChecker(1, pictionaryChecker, self.messageq, word, keepAlive)
+                dequeueThread.start()
+                #might have issues here if main thread is blocking, but main thread is the one responsible for adding items to the queue
+                result = None
+                for i in range(60):
+                    result = dequeueThread.join(False)
+                    await asyncio.sleep(1)
+                    if result != None:
+                        keepAlive.value = False
+                        break
+                keepAlive.value = False
+                await asyncio.sleep(3)
+                #pull other messages off queue
+                while  not self.messageq.empty():
+                    lateGuess = self.messageq.get(False)
+                if dequeueThread.isAlive():
+                    print("SHOULD NOT BE HERE NEED TO MANAGE THREAD BETTER")
+
+                print(result)
+                if result == None:
+                    #no one won
+                    await self.safe_send_message(channel, "No winners, word was " + words[wordNo])
+                else:
+                    await self.safe_send_message(channel, "Winner is " + result + "\nWord was " + words[wordNo])
+                    players = add_scores(players, (result, 1))
+                    #print(*players)
+                    await self.safe_send_message(channel, printable_scores(players))
+
+            self.triviaMode = False
 
     """
     START OF TRIVA CODE ------------------------------------------------------------------------------------------------
@@ -2056,6 +2170,9 @@ class MusicBot(discord.Client):
         Starts a game of trivia with the given trivalist.
         If not list given prints out available lists.
         """
+        if self.finished == True:
+            await self.safe_send_message(channel, "Game already in progress")
+            return
 
         #check if need to set max_score
         if len(leftover_args) == 2:
@@ -2217,6 +2334,37 @@ class answerChecker (threading.Thread):
         threading.Thread.join(self, timeout)
         return self._return
 
+class pictionaryChecker (threading.Thread):
+    def __init__(self, threadID, name, messageQueue, word, keepAlive):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.messageQueue = messageQueue
+        self.word = word
+        self._return = None
+        self.keepAlive = keepAlive
+    def run(self):
+        while True:
+            if self.keepAlive.value:
+                #take a message off the queue and check it, only exit if it scored points
+                try:
+                    guess = self.messageQueue.get(True, 1)
+                    correct = check_word(guess[1], self.word)
+                    if(correct):
+                        #someone guessed right
+                        self._return = (guess[0])
+                        break
+                except:
+                    pass
+            else:
+                print("gonna try to kill myself now")
+                break
+
+    def join(self, timeout):
+        #return tuple (name, score) if someone guessed right
+        threading.Thread.join(self, timeout)
+        return self._return
+
 class pythonIsGay:
     """
     Container for a reference since no easy to use types are mutable in python and you cant pass a reference
@@ -2260,6 +2408,9 @@ def check_guess(guess, song):
     if score == 2:
         score = 4
     return score
+
+def check_word(guess, word):
+        return word.lower() in guess.lower()
 
 def add_scores(players, result):
     """
