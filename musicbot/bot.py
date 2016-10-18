@@ -2085,6 +2085,8 @@ class MusicBot(discord.Client):
                 print("Using extra parameter: "  + extraParameters)
                 lines = lines[1:]
             words = lines
+            for word in words:
+                print(word)
             await self.safe_send_message(channel, "Starting pictionary. Category: " + leftover_args[0])
 
             players = []
@@ -2129,7 +2131,7 @@ class MusicBot(discord.Client):
                 # END OF GETTING URLS
                 #----------------------------------------
                 keepAlive = pythonIsGay(True)
-                dequeueThread = pictionaryChecker(1, pictionaryChecker, self.messageq, word, keepAlive)
+                dequeueThread = pictionaryChecker(1, pictionaryChecker, self.messageq, words[wordNo], keepAlive)
                 dequeueThread.start()
                 #might have issues here if main thread is blocking, but main thread is the one responsible for adding items to the queue
                 result = None
