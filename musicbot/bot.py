@@ -40,6 +40,7 @@ import queue
 import threading
 from musicbot.leaderboards import LeaderboardManager
 import http.client, urllib.request, urllib.parse, urllib.error, base64
+import json
 
 
 load_opus_lib()
@@ -2051,7 +2052,7 @@ class MusicBot(discord.Client):
         Starts a game of pictionary with the given wordlist.
         If not list given prints out available lists.
         """
-        await self.safe_send_message(channel, "https://tse4.mm.bing.net/th?id=OIP.M849f4c0032065d80637918c9b6519a87o0&pid=Api")
+        #await self.safe_send_message(channel, "https://tse4.mm.bing.net/th?id=OIP.M849f4c0032065d80637918c9b6519a87o0&pid=Api")
         if self.finished == True:
             await self.safe_send_message(channel, "Game already in progress")
             return
