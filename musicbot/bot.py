@@ -2075,7 +2075,7 @@ class MusicBot(discord.Client):
         else:
             self.finished = False
             #open file and load in song list
-            with open("trivia/" + leftover_args[0] + ".txt") as f:
+            with open("pictionary/" + leftover_args[0] + ".txt") as f:
                 lines = f.readlines()
                 f.close()
             #format song list
