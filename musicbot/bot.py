@@ -2084,9 +2084,10 @@ class MusicBot(discord.Client):
                 extraParameters = lines[0][1:]
                 print("Using extra parameter: "  + extraParameters)
                 lines = lines[1:]
-            words = lines
-            for word in words:
-                print(word)
+            words = []
+            for word in lines:
+                print(word.strip())
+                words.append(word.strip())
             await self.safe_send_message(channel, "Starting pictionary. Category: " + leftover_args[0])
 
             players = []
@@ -2135,7 +2136,12 @@ class MusicBot(discord.Client):
                 dequeueThread.start()
                 #might have issues here if main thread is blocking, but main thread is the one responsible for adding items to the queue
                 result = None
+                imageCounter = 0
                 for i in range(60):
+                    if i % 5 == 0:
+                        #post an image
+                        await self.safe_send_message(channel, urls[imageCounter])
+                        imageCounter += 1
                     result = dequeueThread.join(False)
                     await asyncio.sleep(1)
                     if result != None:
