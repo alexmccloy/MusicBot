@@ -2042,7 +2042,7 @@ class MusicBot(discord.Client):
         lm.load_leaderboard()
         await self.safe_send_message(channel, lm.load_game_results(listName))
 
-    async def cmd_pictionary(self, channel):
+    async def cmd_pictionary(self, channel, leftover_args):
         """
         Usage:
             {command_prefix}pictionary wordList <max_score>
