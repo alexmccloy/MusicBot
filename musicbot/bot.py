@@ -2179,7 +2179,7 @@ class MusicBot(discord.Client):
         Starts a game of trivia with the given trivalist.
         If not list given prints out available lists.
         """
-        if self.finished == True:
+        if self.triviaMode == True:
             await self.safe_send_message(channel, "Game already in progress")
             return
 
@@ -2232,10 +2232,11 @@ class MusicBot(discord.Client):
                 if winner > -1:
                     self.finished = True
                     await self.safe_send_message(channel, "-----------------------------\nWinner is " + players[winner][0]+"!\nUpdating Leaderboards...")
-                    lm = LeaderboardManager(self.max_score)
-                    lm.load_leaderboard()
-                    lm.add_game_results(leftover_args[0], players)
-                    lm.save_leaderboard()
+                    if len(players > 1):
+                        lm = LeaderboardManager(self.max_score)
+                        lm.load_leaderboard()
+                        lm.add_game_results(leftover_args[0], players)
+                        lm.save_leaderboard()
                     continue
                 #Pick a song from the list and play it
                 songNo = random.randint(0,len(songs)-1)
