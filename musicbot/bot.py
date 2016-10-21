@@ -2232,7 +2232,7 @@ class MusicBot(discord.Client):
                 if winner > -1:
                     self.finished = True
                     await self.safe_send_message(channel, "-----------------------------\nWinner is " + players[winner][0]+"!\nUpdating Leaderboards...")
-                    if len(players > 1):
+                    if len(players) > 1:
                         lm = LeaderboardManager(self.max_score)
                         lm.load_leaderboard()
                         lm.add_game_results(leftover_args[0], players)
