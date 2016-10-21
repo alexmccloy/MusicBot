@@ -2053,7 +2053,7 @@ class MusicBot(discord.Client):
         If not list given prints out available lists.
         """
         #await self.safe_send_message(channel, "https://tse4.mm.bing.net/th?id=OIP.M849f4c0032065d80637918c9b6519a87o0&pid=Api")
-        if self.finished == True:
+        if self.triviaMode == True:
             await self.safe_send_message(channel, "Game already in progress")
             return
         #check if need to set max_score
@@ -2105,7 +2105,7 @@ class MusicBot(discord.Client):
                     continue
                 #Pick a song from the list and play it
                 wordNo = random.randint(0,len(words)-1)
-                print("random word is " + words[wordNo][0])
+                print("random word is " + words[wordNo])
                 #----------------------------------------
                 # GET LIST OF IMAGES FROM BING
                 #----------------------------------------
