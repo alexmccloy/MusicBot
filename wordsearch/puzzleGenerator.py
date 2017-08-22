@@ -60,5 +60,5 @@ if __name__ == '__main__':
         rotate_puzzle()
         exit()
 
-    for i in range(0,createPuzzle[1]):
+    for i in range(0,args.createPuzzle[1]):
         print(i)
