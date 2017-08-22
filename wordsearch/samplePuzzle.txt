@@ -1,0 +1,5 @@
+<xml>
+    letters
+    crossword data (probably 2d array)
+    (words,score)
+    scoreboard?

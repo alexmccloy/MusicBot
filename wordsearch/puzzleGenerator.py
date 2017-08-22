@@ -51,6 +51,7 @@ def generatePuzzle(letterCount):
         letterCount = letterCount - 1
 
     #generate a score against each word based on lettercount and word frequency
+    scoredWords = assignWordScores(matchingWords)
 
     #put 10? of the words into a crossword (if there are less than 10 reroll?)
 
@@ -72,7 +73,41 @@ def importWordList():
             #append to correct level of array
             l = line.trim()
             wordArray[len(l)].append(l)
-    return wordArray
+    return sorted(wordArray)
+
+#returns a list of pairs (score, word)
+#score is from 1-20 based on how common word is (20=best=less common. also factor in word length)
+#15 points for rarity, 5 for word length (7 letter word = maximum points)
+def assignWordScores(matchingWords):
+    scoredWordsAll = []
+    scoredWordsMatching = []
+    with open("wordFreq.txt") as f:
+        for line in f:
+            l = line.split(" ") #format WORD1 WORD2 TYPE FREQ
+            #need to do both words in each row
+            scoredWordsAll.append((calculateWordScore(l[0],l[3]), l[0]))
+            scoredWordsAll.append((calculateWordScore(l[1],l[3]), l[0]))
+
+    #check against matchingWords
+    for i in matchingWords: #string
+        for j in scoredWordsAll: # (score, word)
+            if i == j[1]:
+                scoredWordsMatching.append(j)
+
+    return scoredWordsMatching
+
+#max word freq =~ 1100000
+#score = 15-freq/78571 + max(7,len(word))-2
+def calculateWordScore(word, freq):
+    score = 0
+    score += 15 - (freq / 78571)
+    if len(word) > 7:
+        score += 5
+    else:
+        score += len(word) - 2
+    return score
+
+
 
 def createWordArray(maxLevel):
     ret = []
@@ -98,6 +133,6 @@ if __name__ == '__main__':
         rotate_puzzle()
 
     if args.createPuzzle:
-        for i in range(0,args.createPuzzle[1]):
+        for i in range(0,args.createPuzzle[1]): #number of puzzles to make
             print("Creating puzzle number " + i + " with " + args.createPuzzle[0] + " letters.")
-            generatePuzzle(args.createPuzzle[0])
+            generatePuzzle(args.createPuzzle[0]) #number of letters in puzzles
