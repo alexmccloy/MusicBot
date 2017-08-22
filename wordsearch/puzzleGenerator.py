@@ -7,13 +7,30 @@
 
 import argparse
 import glob
+from random import randint
+import os
+
+DEFAULT_LETTERS = 6
 
 def rotate_puzzle():
+    files = []
     for file in glob.glob("new/*.txt"):
         if debug:
             print(file)
+        files.append(file)
+
+    if len(files) == 0:
+        generatePuzzle(DEFAULT_LETTERS)
+        rotate_puzzle()
+        return
+
+    #move current to used
+
+    #pick random new and move to current
 
 def generatePuzzle(letterCount):
+    #import list of words and group into arrays by word length
+
     #choose a word with letterCount letters from list
 
     #check every word in list with <=letterCount letters and see if that word can be made with letterGroup
