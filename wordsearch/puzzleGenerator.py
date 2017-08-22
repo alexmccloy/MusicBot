@@ -36,6 +36,7 @@ def getFilesInNewDir():
 def generatePuzzle(letterCount):
     pass
     #import list of words and group into arrays by word length
+    wordList = importWordList
 
     #choose a word with letterCount letters from list
 
@@ -46,6 +47,19 @@ def generatePuzzle(letterCount):
     #put 10? of the words into a crossword (if there are less than 10 reroll?)
 
     #format and write to text file
+
+#Returns a 2d array, an array for each word length containing all those words
+def importWordList():
+    wordArray = createWordArray(50)
+    with open("wordList.txt", 'r') as f:
+        text = f.readlines()
+
+def createWordArray(maxLevel):
+    ret = []
+    for i in range(0,maxLevel-1):
+        ret.append([])
+    return ret
+
 
 
 
