@@ -9,19 +9,22 @@ import argparse
 import glob
 from random import randint
 import os
+from datetime import datetime
 
 DEFAULT_LETTERS = 6
+CURRENT_PUZZLE_NAME = "current.txt"
 
 def rotate_puzzle():
-
+    files = getFilesInNewDir()
     if len(files) == 0:
         generatePuzzle(DEFAULT_LETTERS)
-        rotate_puzzle()
-        return
+        files = getFilesInNewDir()
 
     #move current to used
+    os.rename(CURRENT_PUZZLE_NAME, "new/"+str(datetime.now()))
 
     #pick random new and move to current
+    os.rename(files[randint(0,len(files-1))], CURRENT_PUZZLE_NAME)
 
 def getFilesInNewDir():
     files = []
