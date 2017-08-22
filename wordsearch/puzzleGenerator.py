@@ -59,7 +59,7 @@ if __name__ == '__main__':
     if args.getPuzzle:
         print("Rotating puzzle")
         rotate_puzzle()
-        break
+        exit()
 
     for i in range(0,puzzleCount):
         print(i)
