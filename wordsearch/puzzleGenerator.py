@@ -37,10 +37,18 @@ def generatePuzzle(letterCount):
     pass
     #import list of words and group into arrays by word length
     wordList = importWordList
+    matchingWords = []
 
     #choose a word with letterCount letters from list
+    chosenWord = wordList[letterCount][randint(0,len(wordList[letterCount]))]
 
     #check every word in list with <=letterCount letters and see if that word can be made with letterGroup
+    while letterCount >= 3:
+        for word in wordList[letterCount]:
+            if checkLettersInWord(chosenWord, word):
+                matchingWords.append(word)
+
+        letterCount = letterCount - 1
 
     #generate a score against each word based on lettercount and word frequency
 
@@ -48,11 +56,23 @@ def generatePuzzle(letterCount):
 
     #format and write to text file
 
+#returns true if word can be made by letters
+def checkLettersInWord(letters, word):
+    for l in word:
+        if l not in letters:
+            return false
+    return true
+
+
 #Returns a 2d array, an array for each word length containing all those words
 def importWordList():
     wordArray = createWordArray(50)
     with open("wordList.txt", 'r') as f:
-        text = f.readlines()
+        for line in f:
+            #append to correct level of array
+            l = line.trim()
+            wordArray[len(l)].append(l)
+    return wordArray
 
 def createWordArray(maxLevel):
     ret = []
