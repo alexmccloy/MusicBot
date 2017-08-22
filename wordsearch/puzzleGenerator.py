@@ -29,6 +29,7 @@ def rotate_puzzle():
     #pick random new and move to current
 
 def generatePuzzle(letterCount):
+    pass
     #import list of words and group into arrays by word length
 
     #choose a word with letterCount letters from list
