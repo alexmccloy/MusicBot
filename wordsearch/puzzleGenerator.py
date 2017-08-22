@@ -13,11 +13,6 @@ import os
 DEFAULT_LETTERS = 6
 
 def rotate_puzzle():
-    files = []
-    for file in glob.glob("new/*.txt"):
-        if debug:
-            print(file)
-        files.append(file)
 
     if len(files) == 0:
         generatePuzzle(DEFAULT_LETTERS)
@@ -27,6 +22,13 @@ def rotate_puzzle():
     #move current to used
 
     #pick random new and move to current
+
+def getFilesInNewDir():
+    files = []
+    for file in glob.glob("new/*.txt"):
+        if args.debug: #may have problems if this needs to be declared global
+            print(file)
+        files.append(file)
 
 def generatePuzzle(letterCount):
     pass
@@ -49,9 +51,8 @@ if __name__ == '__main__':
     parser.add_argument("--createPuzzle", "-c", nargs=2, type=int, help="Create a puzzle with X letters, Y times")
     parser.add_argument("-g", "--getPuzzle", action="store_true", help="rotates a new puzzle")
     parser.add_argument("-d", "--debug", action="store_true", help="extra debugging text")
-    args = parser.parse_args()
+    global args = parser.parse_args()
 
-    print("got here")
     if args.debug:
         print("debug mode on")
 
