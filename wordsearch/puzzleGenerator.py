@@ -61,5 +61,5 @@ if __name__ == '__main__':
         rotate_puzzle()
         break
 
-    for (i in range(0,puzzleCount)):
-        continue
+    for i in range(0,puzzleCount):
+        print(i)
