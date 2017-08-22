@@ -46,8 +46,7 @@ def generatePuzzle(letterCount):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("letterCount", type=int, help="How many letters each puzzle should have")
-    parser.add_argument("puzzleCount", type=int, help="How many puzzles to generate")
+    parser.add_argument("--createPuzzle", "-c", nargs=2, type=int, help="Create x puzzles with y letters")
     parser.add_argument("-g", "--getPuzzle", action="store_true", help="rotates a new puzzle")
     parser.add_argument("-d", "--debug", action="store_true", help="extra debugging text")
     args = parser.parse_args()
