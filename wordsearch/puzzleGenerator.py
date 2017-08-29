@@ -49,11 +49,19 @@ def generatePuzzle(letterCount):
                 matchingWords.append(word)
 
         letterCount = letterCount - 1
+        
 
     #generate a score against each word based on lettercount and word frequency
     scoredWords = assignWordScores(matchingWords)
 
     #put 10? of the words into a crossword (if there are less than 10 reroll?)
+    #pick 9 words + chosenWord, square random number to bias higher scored words
+    crosswordWords = [chosenWord]
+    for i in range(0, randint(5,9)):
+        continue
+
+    for w in scoredWords:
+        print(w)
 
     #format and write to text file
 
