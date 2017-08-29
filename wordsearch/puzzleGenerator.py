@@ -61,21 +61,33 @@ def generatePuzzle(letterCount):
 
     #put 10? of the words into a crossword (TODO: if there are less than 10 reroll?)
     #pick 9 words + chosenWord, square random number to bias higher scored words
-    crosswordWords = [chosenWord]
-    if len(scoredWords) < 5:
-        print("ERROR: chosen word does not have enough combinations, returning")
+    crosswordWords = []
+    indicies = []
+    if len(scoredWords) < 9:
+        print("ERROR: chosen word does not have enough combinations, only found " + len(scoredWords))
         return #this word is not good enough
     for i in range(0, randint(5,9)):
-        math.pow(random.uniform(0,1),2)
+        index = int(math.pow(random.uniform(0,1),2)*len(scoredWords)+1)
+        if index not in indicies:
+            indicies.append(index)
+
+    for i in indicies:
+        crosswordWords.append(scoredWords[i])
+    if notInList(chosenWord, crosswordWords):
+        crosswordWords.append((20, chosenWord))
+    #TODO add this to debug mode only
+    print(crosswordWords)
 
 
     #format and write to text file
 
 #returns true if word can be made by letters
 def checkLettersInWord(letters, word):
+    letters = list(letters)
     for l in word:
         if l not in letters:
             return False
+        letters.remove(l)
     return True
 
 
@@ -105,7 +117,7 @@ def assignWordScores(matchingWords):
     #check against matchingWords
     for i in matchingWords: #string
         for j in scoredWordsAll: # (score, word)
-            if i == j[1] and uniqueInList(i, scoredWordsMatching):
+            if i == j[1] and notInList(i, scoredWordsMatching):
                 scoredWordsMatching.append(j)
 
     #print(scoredWordsMatching)
@@ -123,7 +135,7 @@ def calculateWordScore(word, freq):
     return score
 
 #returns true if word is not in words list
-def uniqueInList(word, words):
+def notInList(word, words):
     for a in words:
         if word == a[1]:
             return False
