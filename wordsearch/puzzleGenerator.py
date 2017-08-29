@@ -40,6 +40,7 @@ def generatePuzzle(letterCount):
     matchingWords = []
 
     #choose a word with letterCount letters from list
+    print("lettercount is " + str(letterCount))
     print(wordList[letterCount])
     chosenWord = wordList[letterCount][randint(0,len(wordList[letterCount]))]
 
