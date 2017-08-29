@@ -40,6 +40,7 @@ def generatePuzzle(letterCount):
     matchingWords = []
 
     #choose a word with letterCount letters from list
+    print(wordList)
     chosenWord = wordList[letterCount][randint(0,len(wordList[letterCount]))]
 
     #check every word in list with <=letterCount letters and see if that word can be made with letterGroup
