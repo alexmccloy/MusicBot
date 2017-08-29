@@ -41,7 +41,7 @@ def generatePuzzle(letterCount):
 
     #choose a word with letterCount letters from list
     print("lettercount is " + str(letterCount))
-    print(wordList[letterCount])
+    print(wordList[28])
     chosenWord = wordList[letterCount][randint(0,len(wordList[letterCount]))]
 
     #check every word in list with <=letterCount letters and see if that word can be made with letterGroup
@@ -83,7 +83,7 @@ def importWordList():
             #append to correct level of array
             l = line.strip()
             wordArray[len(l)].append(l)
-    return sorted(wordArray)
+    return wordArray
 
 #returns a list of pairs (score, word)
 #score is from 1-20 based on how common word is (20=best=less common. also factor in word length)
