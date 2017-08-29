@@ -26,7 +26,7 @@ def rotate_puzzle():
     #pick random new and move to current
     os.rename(files[randint(0,len(files-1))], CURRENT_PUZZLE_NAME)
 
-def getFilesInNewDir(): 
+def getFilesInNewDir():
     files = []
     for file in glob.glob("new/*.txt"):
         if args.debug: #may have problems if this needs to be declared global
