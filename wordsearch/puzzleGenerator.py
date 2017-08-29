@@ -142,5 +142,5 @@ if str(__name__) == "__main__":
 
     if args.createPuzzle:
         for i in range(0,args.createPuzzle[1]): #number of puzzles to make
-            print("Creating puzzle number " + str(i) + " with " + args.createPuzzle[0] + " letters.")
+            print("Creating puzzle number " + str(i) + " with " + str(args.createPuzzle[0]) + " letters.")
             generatePuzzle(args.createPuzzle[0]) #number of letters in puzzles
