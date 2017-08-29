@@ -1,3 +1,5 @@
+This project is a fork of RhinoBot's Music bot for discord, adding in a few chat based games to play, as well as a guess the current song game.
+
 # RhinoBot: The music bot for Discord.
 
 MusicBot is a Discord music bot written in [Python](https://www.python.org "Python homepage"). It plays requested songs and if the queue becomes empty it will play through a list of existing songs.
