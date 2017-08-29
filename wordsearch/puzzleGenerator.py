@@ -8,8 +8,10 @@
 import argparse
 import glob
 from random import randint
+import random
 import os
 from datetime import datetime
+import math
 
 DEFAULT_LETTERS = 6
 CURRENT_PUZZLE_NAME = "current.txt"
@@ -40,30 +42,32 @@ def generatePuzzle(letterCount):
     matchingWords = []
 
     #choose a word with letterCount letters from list
-    print("lettercount is " + str(letterCount))
-    print(wordList[28])
-    chosenWord = wordList[letterCount][randint(0,len(wordList[letterCount]))]
+    r = randint(0,len(wordList[letterCount]))
+    chosenWord = wordList[letterCount][r]
+    print("Chosen word is: " + chosenWord)
 
     #check every word in list with <=letterCount letters and see if that word can be made with letterGroup
     while letterCount >= 3:
         for word in wordList[letterCount]:
             if checkLettersInWord(chosenWord, word):
                 matchingWords.append(word)
+                #TODO check that word is also in python dictionary
 
         letterCount = letterCount - 1
         
 
     #generate a score against each word based on lettercount and word frequency
-    scoredWords = assignWordScores(matchingWords)
+    scoredWords = sorted(assignWordScores(matchingWords))
 
     #put 10? of the words into a crossword (TODO: if there are less than 10 reroll?)
     #pick 9 words + chosenWord, square random number to bias higher scored words
     crosswordWords = [chosenWord]
+    if len(scoredWords) < 5:
+        print("ERROR: chosen word does not have enough combinations, returning")
+        return #this word is not good enough
     for i in range(0, randint(5,9)):
-        continue
+        math.pow(random.uniform(0,1),2)
 
-    for w in scoredWords:
-        print(w)
 
     #format and write to text file
 
@@ -93,7 +97,7 @@ def assignWordScores(matchingWords):
     scoredWordsMatching = []
     with open("wordFreq.txt") as f:
         for line in f:
-            l = line.split(" ") #format WORD1 WORD2 TYPE FREQ
+            l = line.split("\t") #format WORD1 WORD2 TYPE FREQ
             #need to do both words in each row
             scoredWordsAll.append((calculateWordScore(l[0],l[3]), l[0]))
             scoredWordsAll.append((calculateWordScore(l[1],l[3]), l[0]))
@@ -101,21 +105,29 @@ def assignWordScores(matchingWords):
     #check against matchingWords
     for i in matchingWords: #string
         for j in scoredWordsAll: # (score, word)
-            if i == j[1]:
+            if i == j[1] and uniqueInList(i, scoredWordsMatching):
                 scoredWordsMatching.append(j)
 
+    #print(scoredWordsMatching)
     return scoredWordsMatching
 
 #max word freq =~ 1100000
 #score = 15-freq/78571 + max(7,len(word))-2
 def calculateWordScore(word, freq):
     score = 0
-    score += 15 - (freq / 78571)
+    score += 15 - (float(freq) / 78571)
     if len(word) > 7:
         score += 5
     else:
         score += len(word) - 2
     return score
+
+#returns true if word is not in words list
+def uniqueInList(word, words):
+    for a in words:
+        if word == a[1]:
+            return False
+    return True
 
 
 
