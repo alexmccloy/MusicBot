@@ -79,7 +79,7 @@ def importWordList():
     with open("wordList.txt", 'r') as f:
         for line in f:
             #append to correct level of array
-            l = line.trim()
+            l = line.strip()
             wordArray[len(l)].append(l)
     return sorted(wordArray)
 
