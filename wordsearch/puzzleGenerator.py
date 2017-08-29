@@ -26,17 +26,17 @@ def rotate_puzzle():
     #pick random new and move to current
     os.rename(files[randint(0,len(files-1))], CURRENT_PUZZLE_NAME)
 
-def getFilesInNewDir():
+def getFilesInNewDir(): 
     files = []
     for file in glob.glob("new/*.txt"):
         if args.debug: #may have problems if this needs to be declared global
             print(file)
         files.append(file)
+    return files
 
 def generatePuzzle(letterCount):
-    pass
     #import list of words and group into arrays by word length
-    wordList = importWordList
+    wordList = importWordList()
     matchingWords = []
 
     #choose a word with letterCount letters from list
@@ -54,7 +54,7 @@ def generatePuzzle(letterCount):
     #generate a score against each word based on lettercount and word frequency
     scoredWords = assignWordScores(matchingWords)
 
-    #put 10? of the words into a crossword (if there are less than 10 reroll?)
+    #put 10? of the words into a crossword (TODO: if there are less than 10 reroll?)
     #pick 9 words + chosenWord, square random number to bias higher scored words
     crosswordWords = [chosenWord]
     for i in range(0, randint(5,9)):
@@ -69,8 +69,8 @@ def generatePuzzle(letterCount):
 def checkLettersInWord(letters, word):
     for l in word:
         if l not in letters:
-            return false
-    return true
+            return False
+    return True
 
 
 #Returns a 2d array, an array for each word length containing all those words
@@ -125,13 +125,13 @@ def createWordArray(maxLevel):
 
 
 
-
-if __name__ == '__main__':
+if str(__name__) == "__main__":
+    global args
     parser = argparse.ArgumentParser()
     parser.add_argument("--createPuzzle", "-c", nargs=2, type=int, help="Create a puzzle with X letters, Y times")
     parser.add_argument("-g", "--getPuzzle", action="store_true", help="rotates a new puzzle")
     parser.add_argument("-d", "--debug", action="store_true", help="extra debugging text")
-    global args = parser.parse_args()
+    args = parser.parse_args()
 
     if args.debug:
         print("debug mode on")
