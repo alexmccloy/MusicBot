@@ -14,6 +14,7 @@ from datetime import datetime
 import math
 from crosswordGenerator import Crossword
 import json
+import uuid
 
 DEFAULT_LETTERS = 6
 CURRENT_PUZZLE_NAME = "current.txt"
@@ -79,15 +80,44 @@ def generatePuzzle(letterCount):
     crossword = Crossword(15,15,"-",5000,crosswordWords)
     crossword.compute_crossword(2)
     crosswordSolution = trimCrosswordSolution(crossword.solution())
-    print(json.dumps(scoredWords))
 
-    #format and write to text file
-    #format = 
-    #<randomised
+    #format and write to text file as JSON
+    #format = {"letters":<letters shuffled>, "crossword":<crossword>, "scores":<scoredwords>}
+    jsonObject = {}
+    jsonObject["letters"] = shuffleLetters(chosenWord)
+    jsonObject["crossword"] = crosswordSolution
+    jsonObject["scores"] = scoredWords
+    #print(json.dumps(jsonObject))
+    f = open(str(uuid.uuid4()), 'a')
+    f.write(json.dumps(jsonObject))
+    f.close()
 
 #removes excess '-' from edges of crossword
 def trimCrosswordSolution(crossword):
-    return crossword #TODO implement this
+    c = crossword.split('\n')
+    #remove any lines that are "---------------"
+    c = list(filter(lambda a: a != "- - - - - - - - - - - - - - - ", c))
+    longestX = 0
+    #work out longest x
+    for line in c:
+        for i in range(0,len(line)-1):
+            if line[i] != '-' and line[i] != ' ':
+                longestX = i
+    #remove anything after longestX
+    for i in range(0,len(c)-1):
+        c[i] = c[i][0:longestX+1]
+    return '\n'.join(c)
+
+
+#randomly orders letters in word
+def shuffleLetters(word):
+    prob = []
+    shuffledWord = ""
+    for letter in word:
+        prob.append((random.uniform(0,1),letter))
+    for p in sorted(prob):
+        shuffledWord += p[1]
+    return shuffledWord
 
 #try to pick an evenly spread sample of words and return a list of their indicies
 #to modify random distribution use this function only
