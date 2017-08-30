@@ -17,7 +17,7 @@ import json
 import uuid
 
 DEFAULT_LETTERS = 6
-CURRENT_PUZZLE_NAME = "current.txt"
+CURRENT_PUZZLE_NAME = "current.json"
 
 def rotate_puzzle():
     files = getFilesInNewDir()
@@ -26,14 +26,14 @@ def rotate_puzzle():
         files = getFilesInNewDir()
 
     #move current to used
-    os.rename(CURRENT_PUZZLE_NAME, "new/"+str(datetime.now()))
+    os.rename(CURRENT_PUZZLE_NAME, "used/"+str(datetime.now())+".json")
 
     #pick random new and move to current
     os.rename(files[randint(0,len(files-1))], CURRENT_PUZZLE_NAME)
 
 def getFilesInNewDir():
     files = []
-    for file in glob.glob("new/*.txt"):
+    for file in glob.glob("new/*.json"):
         if args.debug: #may have problems if this needs to be declared global
             print(file)
         files.append(file)
@@ -88,7 +88,7 @@ def generatePuzzle(letterCount):
     jsonObject["crossword"] = crosswordSolution
     jsonObject["scores"] = scoredWords
     #print(json.dumps(jsonObject))
-    f = open(str(uuid.uuid4()), 'a')
+    f = open("new/" + str(uuid.uuid4()) + ".json", 'a')
     f.write(json.dumps(jsonObject))
     f.close()
 
