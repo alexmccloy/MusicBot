@@ -29,7 +29,7 @@ def rotate_puzzle():
     os.rename(CURRENT_PUZZLE_NAME, "used/"+str(datetime.now())+".json")
 
     #pick random new and move to current
-    os.rename(files[randint(0,len(files-1))], CURRENT_PUZZLE_NAME)
+    os.rename(files[randint(0,len(files)-1)], CURRENT_PUZZLE_NAME)
 
 def getFilesInNewDir():
     files = []
