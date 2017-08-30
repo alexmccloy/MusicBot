@@ -12,6 +12,8 @@ import random
 import os
 from datetime import datetime
 import math
+from crosswordGenerator import Crossword
+import json
 
 DEFAULT_LETTERS = 6
 CURRENT_PUZZLE_NAME = "current.txt"
@@ -62,24 +64,40 @@ def generatePuzzle(letterCount):
     #put 10? of the words into a crossword (TODO: if there are less than 10 reroll?)
     #pick 9 words + chosenWord, square random number to bias higher scored words
     crosswordWords = []
-    indicies = []
-    if len(scoredWords) < 9:
-        print("ERROR: chosen word does not have enough combinations, only found " + len(scoredWords))
+    if len(scoredWords) < 15:
+        print("ERROR: chosen word does not have enough combinations, only found " + str(len(scoredWords)))
         return #this word is not good enough
-    for i in range(0, randint(5,9)):
-        index = int(math.pow(random.uniform(0,1),2)*len(scoredWords)+1)
-        if index not in indicies:
-            indicies.append(index)
-
+    
+    indicies = randomiseIndicies(scoredWords)
+    #crossword list needs to be in format (word, desc)
     for i in indicies:
-        crosswordWords.append(scoredWords[i])
+        crosswordWords.append((scoredWords[i][1], "-"))
     if notInList(chosenWord, crosswordWords):
-        crosswordWords.append((20, chosenWord))
+        crosswordWords.append((chosenWord, "-"))
     #TODO add this to debug mode only
     print(crosswordWords)
-
+    crossword = Crossword(15,15,"-",5000,crosswordWords)
+    crossword.compute_crossword(2)
+    crosswordSolution = trimCrosswordSolution(crossword.solution())
+    print(json.dumps(scoredWords))
 
     #format and write to text file
+    #format = 
+    #<randomised
+
+#removes excess '-' from edges of crossword
+def trimCrosswordSolution(crossword):
+    return crossword #TODO implement this
+
+#try to pick an evenly spread sample of words and return a list of their indicies
+#to modify random distribution use this function only
+def randomiseIndicies(words):
+    indicies=[]
+    #pick 6-10 words
+    for i in range(0, len(words)-1, (len(words)-1)/randint(6,10)):
+        indicies.append(i)
+    print(indicies)
+    return indicies
 
 #returns true if word can be made by letters
 def checkLettersInWord(letters, word):
