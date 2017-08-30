@@ -354,10 +354,10 @@ if __name__ == "__main__":
     
     a = Crossword(15, 15, '-', 5000, word_list)
     a.compute_crossword(2)
-    print a.word_bank()
-    print a.solution()
-    #print a.word_find()
-    #print a.display()
-    #print a.legend()
-    print len(a.current_word_list), 'out of', len(word_list)
-    #print a.debug
+    print(a.word_bank())
+    print(a.solution())
+    #print(a.word_find())
+    #print(a.display())
+    #print(a.legend())
+    print(len(a.current_word_list), 'out of', len(word_list))
+    #print(a.debug)
