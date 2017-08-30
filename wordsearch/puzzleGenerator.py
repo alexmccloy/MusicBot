@@ -57,6 +57,9 @@ def generatePuzzle(letterCount):
                 #TODO check that word is also in python dictionary
 
         letterCount = letterCount - 1
+    if not chosenWord in matchingWords:
+        matchingWords.append(chosenWord)
+    print(matchingWords)
         
 
     #generate a score against each word based on lettercount and word frequency
@@ -65,8 +68,8 @@ def generatePuzzle(letterCount):
     #put 10? of the words into a crossword (TODO: if there are less than 10 reroll?)
     #pick 9 words + chosenWord, square random number to bias higher scored words
     crosswordWords = []
-    if len(scoredWords) < 15:
-        print("ERROR: chosen word does not have enough combinations, only found " + str(len(scoredWords)))
+    if len(scoredWords) < 10:
+        print("WARNING: chosen word does not have enough combinations, only found " + str(len(scoredWords)))
         return #this word is not good enough
     
     indicies = randomiseIndicies(scoredWords)
@@ -80,6 +83,7 @@ def generatePuzzle(letterCount):
     crossword = Crossword(15,15,"-",5000,crosswordWords)
     crossword.compute_crossword(2)
     crosswordSolution = trimCrosswordSolution(crossword.solution())
+    print(crosswordSolution)
 
     #format and write to text file as JSON
     #format = {"letters":<letters shuffled>, "crossword":<crossword>, "scores":<scoredwords>}
@@ -102,7 +106,8 @@ def trimCrosswordSolution(crossword):
     for line in c:
         for i in range(0,len(line)-1):
             if line[i] != '-' and line[i] != ' ':
-                longestX = i
+                if i > longestX:
+                    longestX = i
     #remove anything after longestX
     for i in range(0,len(c)-1):
         c[i] = c[i][0:longestX+1]
@@ -180,7 +185,7 @@ def calculateWordScore(word, freq):
         score += 5
     else:
         score += len(word) - 2
-    return score
+    return math.floor(score)
 
 #returns true if word is not in words list
 def notInList(word, words):
