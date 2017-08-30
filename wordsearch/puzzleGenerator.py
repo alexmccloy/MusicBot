@@ -129,7 +129,7 @@ def shuffleLetters(word):
 def randomiseIndicies(words):
     indicies=[]
     #pick 6-10 words
-    for i in range(0, len(words)-1, (len(words)-1)/randint(6,10)):
+    for i in range(0, len(words)-1, int((len(words)-1)/randint(6,10))):
         indicies.append(i)
     print(indicies)
     return indicies
