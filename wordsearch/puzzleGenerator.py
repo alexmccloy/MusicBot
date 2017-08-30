@@ -92,7 +92,7 @@ def generatePuzzle(letterCount):
     jsonObject["crossword"] = crosswordSolution
     jsonObject["scores"] = scoredWords
     #print(json.dumps(jsonObject))
-    f = open("new/" + str(uuid.uuid4()) + ".json", 'a')
+    f = open("new/" + str(uuid.uuid4()) + ".json", 'w')
     f.write(json.dumps(jsonObject))
     f.close()
 
