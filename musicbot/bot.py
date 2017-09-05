@@ -41,6 +41,8 @@ import threading
 from musicbot.leaderboards import LeaderboardManager
 import http.client, urllib.request, urllib.parse, urllib.error, base64
 import json
+from subprocess import Popen, PIPE
+import shlex
 
 
 load_opus_lib()
@@ -2042,6 +2044,37 @@ class MusicBot(discord.Client):
         lm = LeaderboardManager(self.max_score)
         lm.load_leaderboard()
         await self.safe_send_message(channel, lm.load_game_results(listName))
+
+    async def cmd_wordsearch(self, channel, leftover_args):
+        """
+        Usage:
+            {command_prefix}wordsearch
+            {command_prefix}wordsearch <wordlen> <amount> Generates <amount> of new games
+
+        Starts a game of pictionary with the given wordlist.
+        If not list given prints out available lists.
+        """
+        if self.triviaMode == True:
+            await self.safe_send_message(channel, "Game already in progress")
+            return
+        #check if generating new games or playing a game
+        if len(leftover_args) == 2:
+            if not (leftover_args[0].isdigit() and leftover_args[1].isdigit()):
+                await self.safe_send_message(channel, "bad args")
+                return
+            cmd = "python3 wordsearch/puzzleGenerator.py -g " + leftover_args[0] + " " + leftover_args[1]
+            process = Popen(shlex.split(cmd), stdout=PIPE)
+            process.communicate()
+            exit_code = process.wait()
+            await self.safe_send_message(channel, exit_code)
+        else:
+            await self.safe_send_message(channel, "Starting new game")
+            cmd = "python3 wordsearch/puzzleGenerator.py -g " + leftover_args[0] + " " + leftover_args[1]
+            process = Popen(shlex.split(cmd), stdout=PIPE)
+            process.communicate()
+            exit_code = process.wait()
+            await self.safe_send_message(channel, exit_code)
+        
 
     async def cmd_pictionary(self, channel, leftover_args):
         """
