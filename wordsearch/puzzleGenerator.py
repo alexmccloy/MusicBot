@@ -90,6 +90,7 @@ def generatePuzzle(letterCount):
     jsonObject = {}
     jsonObject["letters"] = shuffleLetters(chosenWord)
     jsonObject["crossword"] = crosswordSolution
+    jsonObject["crosswordWords"] = [word[0] for word in crosswordWords] #get first word in each sublist
     jsonObject["scores"] = scoredWords
     #print(json.dumps(jsonObject))
     f = open("new/" + str(uuid.uuid4()) + ".json", 'w')

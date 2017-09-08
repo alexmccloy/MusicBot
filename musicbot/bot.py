@@ -2080,12 +2080,29 @@ class MusicBot(discord.Client):
         #start new game with file in wordsearch/current.json
         f = open("wordsearch/current.json", 'r')
         puzzleJson = json.loads(f.readlines())
+        f.close()
 
-        letters = puzzleJson["letters"] #available letter
-        crosswordSolution = puzzleJson["crossword"] #solved crossword
-        crossword = unsolveCrossword(crosswordSolution) #unsolved crossword
-        scoredWords = puzzleJson["scores"] #list of available words with scores
-        foundWords = [] #list of valid words found so far by users
+        self.finished = False
+        
+        await self.safe_send_message(channel, "Starting wordsearch")
+
+        players = []
+        self.triviaMode = True
+        while not self.finished:
+            #Check if someone has won yet
+            winner = max_score_reached(self.max_score, players)
+            if winner > -1:
+                self.finished = True
+                await self.safe_send_message(channel, "-----------------------------\nWinner is " + players[winner][0]+"!")
+                continue
+            wordNo = random.randint(0,len(words)-1)
+            print(crosswordSolution) #debug only
+
+            gameManager = crosswordGameManager(puzzleJson)
+
+            keepAlive = pythonIsGay(True)
+            dequeueThread = crosswordChecker(2, crosswordChecker, self.messageq, gameManager, keepAlive)
+            dequeueThread.start()
             
         
 
