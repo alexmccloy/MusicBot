@@ -43,7 +43,7 @@ import http.client, urllib.request, urllib.parse, urllib.error, base64
 import json
 from subprocess import Popen, PIPE
 import shlex
-from crosswordUtils import *
+from musicbot.crosswordUtils import *
 
 
 load_opus_lib()
