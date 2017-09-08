@@ -2066,6 +2066,7 @@ class MusicBot(discord.Client):
                 await self.safe_send_message(channel, "bad args")
                 return
             cmd = "python3 wordsearch/puzzleGenerator.py -g " + leftover_args[0] + " " + leftover_args[1]
+            print(cmd)
             process = Popen(shlex.split(cmd), stdout=PIPE)
             process.communicate()
             exit_code = process.wait()
