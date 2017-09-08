@@ -2055,11 +2055,13 @@ class MusicBot(discord.Client):
         Starts a game of pictionary with the given wordlist.
         If not list given prints out available lists.
         """
+        print("Recieved wordsearch command with args " + str(leftover_args))
         if self.triviaMode == True:
             await self.safe_send_message(channel, "Game already in progress")
             return
         #check if generating new games or playing a game
         if len(leftover_args) == 2:
+            print("Generating new games")
             if not (leftover_args[0].isdigit() and leftover_args[1].isdigit()):
                 await self.safe_send_message(channel, "bad args")
                 return
