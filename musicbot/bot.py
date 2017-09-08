@@ -2070,6 +2070,7 @@ class MusicBot(discord.Client):
             process.communicate()
             exit_code = process.wait()
             await self.safe_send_message(channel, exit_code)
+            return
         else:
             await self.safe_send_message(channel, "Starting new game")
             cmd = "python3 wordsearch/puzzleGenerator.py -g " + leftover_args[0] + " " + leftover_args[1]
@@ -2081,7 +2082,7 @@ class MusicBot(discord.Client):
         self.max_score = 10 #may want to make this chanageable with arguments in the future
         #start new game with file in wordsearch/current.json
         f = open("wordsearch/current.json", 'r')
-        puzzleJson = json.loads(f.readlines())
+        puzzleJson = json.loads(f.readlines()[0])
         f.close()
 
         self.finished = False
