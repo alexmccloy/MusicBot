@@ -2085,25 +2085,33 @@ class MusicBot(discord.Client):
         self.finished = False
         
         await self.safe_send_message(channel, "Starting wordsearch")
-
-        players = []
+        gameManager = crosswordGameManager(puzzleJson)
         self.triviaMode = True
+        keepAlive = pythonIsGay(True)
+        dequeueThread = crosswordChecker(2, crosswordChecker, self.messageq, gameManager, keepAlive)
+        dequeueThread.start()
+        result = None
+        counter = 0
+
         while not self.finished:
-            #Check if someone has won yet
-            winner = max_score_reached(self.max_score, players)
-            if winner > -1:
-                self.finished = True
-                await self.safe_send_message(channel, "-----------------------------\nWinner is " + players[winner][0]+"!")
-                continue
-            wordNo = random.randint(0,len(words)-1)
-            print(crosswordSolution) #debug only
-
-            gameManager = crosswordGameManager(puzzleJson)
-
-            keepAlive = pythonIsGay(True)
-            dequeueThread = crosswordChecker(2, crosswordChecker, self.messageq, gameManager, keepAlive)
-            dequeueThread.start()
+            #allow dequeueThread to run the game, while printing the crossword status every 10 secs
+            if counter % 10 == 0:
+                await self.safe_send_message(channel, formatCrosswordOutput(gameManager.crossword, gameManger.letters))
+            result = dequeueThread.join(False)
+            await asyncio.sleep(1)
+            if result != None:
+                keepAlive.value = False
+                break
             
+        keepAlive.value = False
+        await asyncio.sleep(3)
+        #pull other messages off queue
+        while  not self.messageq.empty():
+            lateGuess = self.messageq.get(False)
+        if dequeueThread.isAlive():
+            print("SHOULD NOT BE HERE NEED TO MANAGE THREAD BETTER")
+
+        print(result)
         
 
     async def cmd_pictionary(self, channel, leftover_args):
