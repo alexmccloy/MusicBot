@@ -43,6 +43,7 @@ import http.client, urllib.request, urllib.parse, urllib.error, base64
 import json
 from subprocess import Popen, PIPE
 import shlex
+from crosswordUtils import *
 
 
 load_opus_lib()
@@ -2074,6 +2075,18 @@ class MusicBot(discord.Client):
             process.communicate()
             exit_code = process.wait()
             await self.safe_send_message(channel, exit_code)
+
+        self.max_score = 10 #may want to make this chanageable with arguments in the future
+        #start new game with file in wordsearch/current.json
+        f = open("wordsearch/current.json", 'r')
+        puzzleJson = json.loads(f.readlines())
+
+        letters = puzzleJson["letters"] #available letter
+        crosswordSolution = puzzleJson["crossword"] #solved crossword
+        crossword = unsolveCrossword(crosswordSolution) #unsolved crossword
+        scoredWords = puzzleJson["scores"] #list of available words with scores
+        foundWords = [] #list of valid words found so far by users
+            
         
 
     async def cmd_pictionary(self, channel, leftover_args):
