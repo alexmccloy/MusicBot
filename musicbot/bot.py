@@ -2101,6 +2101,7 @@ class MusicBot(discord.Client):
         while not self.finished:
             #allow dequeueThread to run the game, while printing the crossword status every 10 secs
             if counter % 10 == 0:
+                print(counter)
                 await self.safe_send_message(channel, formatCrosswordOutput(gameManager.crossword, gameManager.letters))
             result = dequeueThread.join(False)
             await asyncio.sleep(1)
