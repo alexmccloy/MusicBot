@@ -46,7 +46,7 @@ class crosswordGameManager:
                 print("AND HERE")
                 self.revealWord(guess)
                 self.crosswordWords.remove(guess)
-                print(self.crossword)
+                print(str(self.crossword))
             #check if crossword is complete
             if len(self.crosswordWords) == 0:
                 return 1
