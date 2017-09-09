@@ -36,9 +36,11 @@ class crosswordGameManager:
         print(player)
         print(self.crosswordWords)
         if (guess in self.scoredWords) and (guess not in self.foundWords):
+            print("GOT HERE")
             self.updateScores((self.getWordScore(guess), player))
             self.foundWords.append(guess)
             if guess in self.crosswordWords:
+                print("AND HERE")
                 self.revealWord(guess)
                 self.crosswordWords.remove(guess)
                 print(self.crossword)
