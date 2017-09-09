@@ -40,6 +40,7 @@ class crosswordGameManager:
             if guess in self.crosswordWords:
                 self.revealWord(guess)
                 self.crosswordWords.remove(guess)
+                print(self.crosswordWords)
             #check if crossword is complete
             if len(self.crosswordWords) == 0:
                 return 1
