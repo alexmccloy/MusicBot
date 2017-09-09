@@ -149,7 +149,7 @@ def checkLettersInWord(letters, word):
 #Returns a 2d array, an array for each word length containing all those words
 def importWordList():
     wordArray = createWordArray(50)
-    with open("wordList.txt", 'r') as f:
+    with open(DIRECTORY+"wordList.txt", 'r') as f:
         for line in f:
             #append to correct level of array
             l = line.strip()
@@ -162,7 +162,7 @@ def importWordList():
 def assignWordScores(matchingWords):
     scoredWordsAll = []
     scoredWordsMatching = []
-    with open("wordFreq.txt") as f:
+    with open(DIRECTORY+"wordFreq.txt") as f:
         for line in f:
             l = line.split("\t") #format WORD1 WORD2 TYPE FREQ
             #need to do both words in each row
