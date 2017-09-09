@@ -28,6 +28,9 @@ class crosswordGameManager:
         self.crosswordWords = jsonCrossword["crosswordWords"] #words that are in the crossword
         self.players = [] #list of tuples with (score, player) that can be sorted
 
+        print(self.crossword)
+        print(self.crosswordSolution)
+
     #returns -1 if guess is wrong, 0 if word found, and 1 if crossword complete
     #internally updates variables and checks a players guess / adds scores
     #TODO may want to add extra return val for crosswordWord found to reprint crossword immediately
