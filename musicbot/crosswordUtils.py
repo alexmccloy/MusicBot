@@ -32,6 +32,8 @@ class crosswordGameManager:
     #internally updates variables and checks a players guess / adds scores
     #TODO may want to add extra return val for crosswordWord found to reprint crossword immediately
     def checkGuess(self, guess, player):
+        print(guess)
+        print(player)
         if (guess in self.scoredWords) and (guess not in self.foundWords):
             self.updateScores((self.getWordScore(guess), player))
             self.foundWords.append(guess)
