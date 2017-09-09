@@ -2075,7 +2075,7 @@ class MusicBot(discord.Client):
             return
         else:
             await self.safe_send_message(channel, "Starting new game")
-            cmd = "python3 wordsearch/puzzleGenerator.py -g " + leftover_args[0] + " " + leftover_args[1]
+            cmd = "python3 wordsearch/puzzleGenerator.py -g "
             process = Popen(shlex.split(cmd), stdout=PIPE)
             process.communicate()
             exit_code = process.wait()
