@@ -2104,6 +2104,7 @@ class MusicBot(discord.Client):
                 print(counter)
                 await self.safe_send_message(channel, formatCrosswordOutput(gameManager.crossword, gameManager.letters))
             result = dequeueThread.join(False)
+            counter+=1
             await asyncio.sleep(1)
             if result != None:
                 keepAlive.value = False
