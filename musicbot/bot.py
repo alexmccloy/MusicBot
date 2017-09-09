@@ -2070,6 +2070,7 @@ class MusicBot(discord.Client):
             process = Popen(shlex.split(cmd), stdout=PIPE)
             process.communicate()
             exit_code = process.wait()
+            print(exit_code)
             await self.safe_send_message(channel, exit_code)
             return
         else:
