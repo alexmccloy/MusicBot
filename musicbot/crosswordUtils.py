@@ -55,21 +55,22 @@ class crosswordGameManager:
     #modifies self.crossword to add in the found word
     #wtf why did i decide to write this
     def revealWord(self, word):
-        import pdb; pdb.set_trace()
         print("Revealing word: " + word)
         #check each square for first letter of word
         for y in range(0,len(self.crosswordSolution)):
+            print("Y:"+y)
             for x in range(0,len(self.crosswordSolution)[y]):
+                print("X:"+x)
                 if word[0] == self.crosswordSolution[y][x]:
                     #Horizontal
                     tempcrossword = self.crossword
                     for i in range(1, len(word)):
                         if word[i] != self.crosswordSolution[y][x+(i*2)]:
                             break
-                        tempcrossword[y] = self.replaceStringChar(tempcrossword[y], x+(i*2), word[i]) 
+                        tempcrossword[y] = self.replaceStringChar(tempcrossword[y], x+(i*2), word[i])
                         if i == len(word)-1: #last char of word - word found
                             self.crossword = tempcrossword
-                            print(str(self.crossword))
+                            print("CROSSWORD IS " + str(self.crossword))
                             return
                     #Vertical
                     tempcrossword = self.crossword
