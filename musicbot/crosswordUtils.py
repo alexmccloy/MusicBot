@@ -34,13 +34,14 @@ class crosswordGameManager:
     def checkGuess(self, guess, player):
         print(guess)
         print(player)
+        print(self.crosswordWords)
         if (guess in self.scoredWords) and (guess not in self.foundWords):
             self.updateScores((self.getWordScore(guess), player))
             self.foundWords.append(guess)
             if guess in self.crosswordWords:
                 self.revealWord(guess)
                 self.crosswordWords.remove(guess)
-                print(self.crosswordWords)
+                print(self.crossword)
             #check if crossword is complete
             if len(self.crosswordWords) == 0:
                 return 1
