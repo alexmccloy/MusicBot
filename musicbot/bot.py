@@ -1,6 +1,5 @@
-print(os.getcwd())
-
 import os
+print(os.getcwd())
 import sys
 import time
 import shlex
