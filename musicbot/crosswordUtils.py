@@ -56,6 +56,7 @@ class crosswordGameManager:
     #wtf why did i decide to write this
     def revealWord(self, word):
         print("Revealing word: " + word)
+        print("LEN IS " + len(self.crosswordSolution))
         #check each square for first letter of word
         for y in range(0,len(self.crosswordSolution)):
             print("Y:"+y)
