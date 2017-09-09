@@ -2088,7 +2088,6 @@ class MusicBot(discord.Client):
         f.close()
 
         self.finished = False
-        import pdb; pdb.set_trace()
         await self.safe_send_message(channel, "Starting wordsearch")
         gameManager = crosswordGameManager(puzzleJson)
         self.triviaMode = True
