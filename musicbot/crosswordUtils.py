@@ -46,7 +46,6 @@ class crosswordGameManager:
                 print("AND HERE")
                 self.revealWord(guess)
                 self.crosswordWords.remove(guess)
-                print(str(self.crossword))
             #check if crossword is complete
             if len(self.crosswordWords) == 0:
                 return 1
@@ -56,6 +55,7 @@ class crosswordGameManager:
     #modifies self.crossword to add in the found word
     #wtf why did i decide to write this
     def revealWord(self, word):
+        print("Revealing word: " + word)
         #check each square for first letter of word
         for y in range(0,len(self.crosswordSolution)):
             for x in range(0,len(self.crosswordSolution)[y]):
@@ -68,6 +68,7 @@ class crosswordGameManager:
                         tempcrossword[y] = self.replaceStringChar(tempcrossword[y], x+(i*2), word[i]) 
                         if i == len(word)-1: #last char of word - word found
                             self.crossword = tempcrossword
+                            print(str(self.crossword))
                             return
                     #Vertical
                     tempcrossword = self.crossword
@@ -77,6 +78,7 @@ class crosswordGameManager:
                         tempcrossword[y+i] = self.replaceStringChar(tempcrossword[y+i], x, word[i])
                         if i == len(word)-1: #last char of word - word found
                             self.crossword = tempcrossword
+                            print(str(self.crossword))
                             return
         print("Word not in crossword, should not be here")
 
