@@ -18,6 +18,7 @@ import uuid
 
 DEFAULT_LETTERS = 6
 CURRENT_PUZZLE_NAME = "current.json"
+DIRECTORY = ""
 
 def rotate_puzzle():
     files = getFilesInNewDir()
@@ -26,14 +27,14 @@ def rotate_puzzle():
         files = getFilesInNewDir()
 
     #move current to used
-    os.rename(CURRENT_PUZZLE_NAME, "used/"+str(datetime.now())+".json")
+    os.rename(CURRENT_PUZZLE_NAME, DIRECTORY+"used/"+str(datetime.now())+".json")
 
     #pick random new and move to current
     os.rename(files[randint(0,len(files)-1)], CURRENT_PUZZLE_NAME)
 
 def getFilesInNewDir():
     files = []
-    for file in glob.glob("new/*.json"):
+    for file in glob.glob(DIRECTORY+"new/*.json"):
         if args.debug: #may have problems if this needs to be declared global
             print(file)
         files.append(file)
@@ -93,7 +94,7 @@ def generatePuzzle(letterCount):
     jsonObject["crosswordWords"] = [word[0] for word in crosswordWords] #get first word in each sublist
     jsonObject["scores"] = scoredWords
     #print(json.dumps(jsonObject))
-    f = open("new/" + str(uuid.uuid4()) + ".json", 'w')
+    f = open(DIRECTORY+"new/" + str(uuid.uuid4()) + ".json", 'w')
     f.write(json.dumps(jsonObject))
     f.close()
 
@@ -212,6 +213,11 @@ if str(__name__) == "__main__":
     parser.add_argument("-g", "--getPuzzle", action="store_true", help="rotates a new puzzle")
     parser.add_argument("-d", "--debug", action="store_true", help="extra debugging text")
     args = parser.parse_args()
+
+    #calculate working dir
+    workingDir = os.getcwd().split('/')[-1]
+    if workingDir != "wordsearch":
+        DIRECTORY = "wordsearch/"
 
     if args.debug:
         print("debug mode on")
