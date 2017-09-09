@@ -34,6 +34,7 @@ class crosswordGameManager:
     def checkGuess(self, guess, player):
         print(guess)
         print(player)
+        print("------------------")
         print("crossword words " + self.crosswordWords)
         print("scored words " + self.scoredWords)
         print("found words " + self.foundWords)
