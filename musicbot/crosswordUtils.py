@@ -22,7 +22,7 @@ class crosswordGameManager:
     def __init__(self, jsonCrossword):
         self.letters = jsonCrossword["letters"] #available letters
         self.crosswordSolution = jsonCrossword["crossword"] #fully solved crossword
-        self.crossword = unsolveCrossword(self.crossword) #current players solution
+        self.crossword = unsolveCrossword(self.crosswordSolution) #current players solution
         self.scoredWords = jsonCrossword["scoredWords"] #all available words and scores
         self.foundWords = [] #words that have been found so far
         self.crosswordWords = jsonCrossword["crosswordWords"] #words that are in the crossword
