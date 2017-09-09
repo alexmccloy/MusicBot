@@ -78,7 +78,7 @@ class crosswordGameManager:
                         tempcrossword[y+i] = self.replaceStringChar(tempcrossword[y+i], x, word[i])
                         if i == len(word)-1: #last char of word - word found
                             self.crossword = tempcrossword
-                            print(str(self.crossword))
+                            print("CROSSWORD IS " + str(self.crossword))
                             return
         print("Word not in crossword, should not be here")
 
