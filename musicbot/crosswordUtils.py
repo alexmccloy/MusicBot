@@ -1,4 +1,5 @@
 import threading
+import pdb
 
 
 #Replaces all letters in a crossword with ?
@@ -55,6 +56,7 @@ class crosswordGameManager:
     #modifies self.crossword to add in the found word
     #wtf why did i decide to write this
     def revealWord(self, word):
+        pdb.set_trace()
         print("Revealing word: " + word)
         #check each square for first letter of word
         for y in range(0,len(self.crosswordSolution)):
