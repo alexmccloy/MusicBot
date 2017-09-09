@@ -33,6 +33,7 @@ class crosswordGameManager:
     #internally updates variables and checks a players guess / adds scores
     #TODO may want to add extra return val for crosswordWord found to reprint crossword immediately
     def checkGuess(self, guess, player):
+        pdb.set_trace()
         print(guess)
         print(player)
         print("------------------")
