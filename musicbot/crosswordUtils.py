@@ -23,7 +23,7 @@ class crosswordGameManager:
         self.letters = jsonCrossword["letters"] #available letters
         self.crosswordSolution = jsonCrossword["crossword"] #fully solved crossword
         self.crossword = unsolveCrossword(self.crosswordSolution) #current players solution
-        self.scoredWords = jsonCrossword["scoredWords"] #all available words and scores
+        self.scoredWords = jsonCrossword["scores"] #all available words and scores
         self.foundWords = [] #words that have been found so far
         self.crosswordWords = jsonCrossword["crosswordWords"] #words that are in the crossword
         self.players = [] #list of tuples with (score, player) that can be sorted
