@@ -38,7 +38,7 @@ class crosswordGameManager:
         print("crossword words " + self.crosswordWords)
         print("scored words " + self.scoredWords)
         print("found words " + self.foundWords)
-        if (guess in self.scoredWords) and (guess not in self.foundWords):
+        if (guess in (item[1] for item in self.scoredWords)) and (guess not in self.foundWords):
             print("GOT HERE")
             self.updateScores((self.getWordScore(guess), player))
             self.foundWords.append(guess)
