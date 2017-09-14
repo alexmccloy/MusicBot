@@ -26,7 +26,7 @@ def l2s(l):
 #also forces crossword to code format for uniform text width
 #TODO may need to add extra data to output later
 def formatCrosswordOutput(crossword, letters):
-    return "Letters: " + letters + "\n`" + crossword + "`"
+    return "Letters: " + letters + "\n" + l2s(crossword) + "\n"
 
 #runs a crossword game and manages everything except for stepping through the game
 class crosswordGameManager:
