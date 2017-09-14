@@ -14,6 +14,14 @@ def unsolveCrossword(crossword):
         ret.append(l)
     return ret
 
+#converts list to printable string
+def l2s(l):
+    s = ""
+    for x in l:
+        s += str(x)
+        s += '\n'
+    return s
+
 #create a formatted output that can be easily read in discord chat
 #also forces crossword to code format for uniform text width
 #TODO may need to add extra data to output later
@@ -51,6 +59,7 @@ class crosswordGameManager:
             if guess in self.crosswordWords:
                 print("AND HERE")
                 crossword = self.revealWord(guess, crosswordSolution, crossword)
+                print(l2s(crossword))
                 self.crosswordWords.remove(guess)
             #check if crossword is complete
             if len(self.crosswordWords) == 0:
@@ -98,7 +107,7 @@ class crosswordGameManager:
         return ret
 
     #adds a column to the right hand side of a 2d array
-    #if crossowrd is None transposes col
+    #if crossword is None transposes col
     #TODO: currently assumes sizes are correct
     def addCol(col, crossword):
         if crossword == None:
