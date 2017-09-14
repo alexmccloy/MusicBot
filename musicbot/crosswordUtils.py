@@ -59,7 +59,7 @@ class crosswordGameManager:
             self.foundWords.append(guess)
             if guess in self.crosswordWords:
                 print("GUESS IS" + guess)
-                crossword = revealWord(guess, crosswordSolution, crossword)
+                crossword = rasdsaevealWord(guess, crosswordSolution, crossword)
                 print(l2s(crossword))
                 self.crosswordWords.remove(guess)
             #check if crossword is complete
