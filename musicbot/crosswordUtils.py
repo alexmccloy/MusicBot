@@ -59,7 +59,7 @@ class crosswordGameManager:
             self.foundWords.append(guess)
             if guess in self.crosswordWords:
                 print("GUESS IS" + guess)
-                crossword = self.revealWord(guess, crosswordSolution, crossword)
+                crossword = revealWord(guess, crosswordSolution, crossword)
                 print(l2s(crossword))
                 self.crosswordWords.remove(guess)
             #check if crossword is complete
@@ -69,7 +69,6 @@ class crosswordGameManager:
         return -1
 
     #returns modified unsolved crossword with the given word revealed
-    #wtf why did i decide to write this
     def revealWord(word, solved, unsolved):
         print("REVEALWORD: " + word + " " + solved + " " + unsolved)
         #check horizontal
