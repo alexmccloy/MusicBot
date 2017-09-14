@@ -58,7 +58,7 @@ class crosswordGameManager:
             self.updateScores((self.getWordScore(guess), player))
             self.foundWords.append(guess)
             if guess in self.crosswordWords:
-                print("AND HERE")
+                print("GUESS IS" + guess)
                 crossword = self.revealWord(guess, crosswordSolution, crossword)
                 print(l2s(crossword))
                 self.crosswordWords.remove(guess)
