@@ -70,6 +70,7 @@ class crosswordGameManager:
     #returns modified unsolved crossword with the given word revealed
     #wtf why did i decide to write this
     def revealWord(word, solved, unsolved):
+        print("REVEALWORD: " + word + " " + solved + " " + unsolved)
         #check horizontal
         temp = []
         found = False
