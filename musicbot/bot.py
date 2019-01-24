@@ -1350,6 +1350,8 @@ class MusicBot(discord.Client):
             await self.on_player_finished_playing(player)
 
     async def cmd_pause(self, player):
+        if self.triviaMode:
+            return
         """
         Usage:
             {command_prefix}pause
@@ -1411,6 +1413,8 @@ class MusicBot(discord.Client):
         return Response(':put_litter_in_its_place:', delete_after=20)
 
     async def cmd_skip(self, player, channel, author, message, permissions, voice_channel):
+        if self.triviaMode:
+            return
         """
         Usage:
             {command_prefix}skip
@@ -1523,6 +1527,8 @@ class MusicBot(discord.Client):
                     'Unreasonable volume provided: {}%. Provide a value between 1 and 100.'.format(new_volume), expire_in=20)
 
     async def cmd_queue(self, channel, player):
+        if self.triviaMode:
+            return
         """
         Usage:
             {command_prefix}queue
@@ -2323,7 +2329,8 @@ class MusicBot(discord.Client):
                 # GET A YOUTUBE LINK FOR SONG AND ADD IT TO QUEUE, THEN SKIP TO THAT SONG
                 #----------------------------------------
                 player.playlist.clear()
-                song_url =  songs[songNo][0] + " " + songs[songNo][1] + extraParameters
+                #song_url =  songs[songNo][0] + " " + songs[songNo][1] + extraParameters
+                song_url =  songs[songNo][0] + " " + songs[songNo][1] + extraParameters + " lyrics"
                 info = await self.downloader.extract_info(player.playlist.loop, song_url, download=False, process=False)
                 if info.get('url', '').startswith('ytsearch'):
                     # print("[Command:play] Searching for \"%s\"" % song_url)
